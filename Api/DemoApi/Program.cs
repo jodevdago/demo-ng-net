@@ -1,6 +1,7 @@
 using DemoApi.Data;
 using Microsoft.EntityFrameworkCore;
 using DemoApi.Services;
+using DemoApi.Repositories;
 using System;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -55,6 +56,10 @@ builder.Services.AddSwaggerGen(c =>
 
 builder.Services.AddSingleton<PasswordService>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+
 
 // JWT
 var key = builder.Configuration["Jwt:Key"];

@@ -1,10 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using DemoApi.Models;
-using DemoApi.Data;
 using DemoApi.DTOs;
 using DemoApi.Services;
-using AutoMapper;
 using System.Security.Claims;  
 using Microsoft.AspNetCore.Authorization;
 
@@ -14,111 +10,71 @@ namespace DemoApi.Controllers
     [Route("api/[controller]")]
     public class UserController : ControllerBase
     {
-        private readonly AppDbContext _context;
-        private readonly PasswordService _passwordService;
-        private readonly IMapper _mapper;
+        private readonly IUserService _userService;
 
-        public UserController(AppDbContext context, PasswordService passwordService, IMapper mapper)
+        public UserController(IUserService userService)
         {
-            _context = context;
-            _passwordService = passwordService;
-            _mapper = mapper;
+            _userService = userService;
         }
 
         [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ReadUserDto>>> GetUsers()
         {
-            var users = await _context.Users.ToListAsync();
-            var userDtos = _mapper.Map<List<ReadUserDto>>(users);
-
-            return Ok(userDtos);
+            var users = await _userService.GetAllUsersAsync();
+            return Ok(users);
         }
 
         [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<ReadUserDto>> GetUserById(Guid id)
         {
-            var user = await _context.Users.FindAsync(id);
-
-            if (user == null)
-                return NotFound();
-
-            var readUserDto = _mapper.Map<ReadUserDto>(user);
-
-            return Ok(readUserDto);
+            var user = await _userService.GetUserByIdAsync(id);
+            return user == null ? NotFound() : Ok(user);
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateUser([FromBody] CreateUserDto createUserDto)
+        public async Task<IActionResult> CreateUser([FromBody] CreateUserDto dto)
         {
-            if (!Enum.IsDefined(typeof(UserLevel), createUserDto.Level))
+            try
             {
-                return BadRequest("Invalid user level.");
+                var createdUser = await _userService.CreateUserAsync(dto);
+                return CreatedAtAction(nameof(GetUserById), new { id = createdUser.Id }, createdUser);
             }
-
-            var emailExists = await _context.Users.AnyAsync(u => u.Email == createUserDto.Email);
-            if (emailExists)
+            catch (ArgumentException ex)
             {
-                return BadRequest("Email already in use.");
+                return BadRequest(ex.Message);
             }
-
-            var hashedPassword = _passwordService.HashPassword(createUserDto.Password);
-            createUserDto.Password = hashedPassword;
-
-            var newUser = _mapper.Map<User>(createUserDto);
-
-            _context.Users.Add(newUser);
-            await _context.SaveChangesAsync();
-
-            var response = _mapper.Map<ReadUserDto>(newUser);
-
-            return CreatedAtAction(nameof(GetUserById), new { id = newUser.Id }, response);
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [Authorize]
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(Guid id, [FromBody] UpdateUserDto updateUserDto)
+        public async Task<IActionResult> PutUser(Guid id, [FromBody] UpdateUserDto dto)
         {
-            if (id != updateUserDto.Id)
-                return BadRequest("L'ID ne correspond pas.");
-
-            if (updateUserDto.Level == null || !Enum.IsDefined(typeof(UserLevel), updateUserDto.Level))
-                return BadRequest("Invalid user level.");
-
-            var user = await _context.Users.FindAsync(id);
-            if (user == null)
-                return NotFound();
-
-            _mapper.Map(updateUserDto, user);
+            if (id != dto.Id)
+                return BadRequest("The ID does not match.");
 
             try
             {
-                await _context.SaveChangesAsync();
+                var updated = await _userService.UpdateUserAsync(dto);
+                return updated ? NoContent() : NotFound();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (ArgumentException ex)
             {
-                if (!_context.Users.Any(u => u.Id == id))
-                    return NotFound();
-                else
-                    throw;
+                return BadRequest(ex.Message);
             }
-
-            return NoContent();
         }
 
-        [Authorize]
+        [Authorize(Policy = "AdminOnly")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(Guid id)
         {
-            var user = await _context.Users.FindAsync(id);
-            if (user == null)
-                return NotFound();
-
-            _context.Users.Remove(user);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            var deleted = await _userService.DeleteUserAsync(id);
+            return deleted ? NoContent() : NotFound();
         }
 
         [Authorize]
@@ -126,33 +82,19 @@ namespace DemoApi.Controllers
         public async Task<ActionResult<ReadUserDto>> GetProfile()
         {
             var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
             if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
-            {
                 return Unauthorized();
-            }
 
-            var user = await _context.Users.FindAsync(userId);
-
-            if (user == null)
-                return NotFound();
-
-            return Ok(_mapper.Map<ReadUserDto>(user));
+            var user = await _userService.GetProfileAsync(userId);
+            return user == null ? NotFound() : Ok(user);
         }
 
         [Authorize(Policy = "AdminOnly")]
         [HttpPost("reset-password")]
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto dto)
         {
-            var user = await _context.Users.SingleOrDefaultAsync(u => u.Email == dto.Email);
-
-            if (user == null)
-                return NotFound("User not found.");
-
-            user.Password = _passwordService.HashPassword(dto.Password);
-            await _context.SaveChangesAsync();
-
-            return Ok("Password reset successfully.");
+            var success = await _userService.ResetPasswordAsync(dto.Email, dto.Password);
+            return success ? Ok("Password reset successfully.") : NotFound("User not found.");
         }
     }
 }
