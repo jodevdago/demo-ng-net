@@ -1,0 +1,80 @@
+##################################
+#      .NET / C# ignore rules    #
+##################################
+
+# Build results
+bin/
+obj/
+out/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Visual Studio / Rider / VS Code
+.vscode/
+.vs/
+.idea/
+
+# ASP.NET Core configuration
+**/appsettings.Development.json
+**/appsettings.Local.json
+**/appsettings.*.json
+secrets.json
+
+# Logs and diagnostics
+*.log
+
+# Dotnet tools
+**/.tool/
+**/.store/
+**/.pnp/
+.pnp.js
+
+# Test results
+TestResults/
+coverage/
+*.coverage
+*.coveragexml
+
+# Publish
+publish/
+
+##################################
+#       Node / Angular rules     #
+##################################
+
+# Node modules
+**/node_modules/
+
+# Build output
+**/dist/
+**/build/
+**/.angular/
+
+# Environment files
+**/.env
+**/.env.*
+
+# Angular cache
+**/.ng/
+
+# IDE configs (if separate in client)
+Client/**/.idea/
+Client/**/.vscode/
+
+##################################
+# Miscellaneous
+##################################
+
+# MacOS / Linux / Windows
+.DS_Store
+Thumbs.db
+ehthumbs.db
+
+# Optional lockfiles
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
