@@ -139,5 +139,20 @@ namespace DemoApi.Controllers
 
             return Ok(_mapper.Map<ReadUserDto>(user));
         }
+
+        [Authorize(Policy = "AdminOnly")]
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto dto)
+        {
+            var user = await _context.Users.SingleOrDefaultAsync(u => u.Email == dto.Email);
+
+            if (user == null)
+                return NotFound("User not found.");
+
+            user.Password = _passwordService.HashPassword(dto.Password);
+            await _context.SaveChangesAsync();
+
+            return Ok("Password reset successfully.");
+        }
     }
 }
