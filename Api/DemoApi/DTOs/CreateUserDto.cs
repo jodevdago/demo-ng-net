@@ -1,6 +1,5 @@
 using System;
 using System.ComponentModel.DataAnnotations;
-using DemoApi.DTOs;
 
 namespace DemoApi.DTOs
 {
