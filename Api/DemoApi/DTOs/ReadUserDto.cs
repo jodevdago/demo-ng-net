@@ -1,5 +1,3 @@
-using DemoApi.DTOs;
-
 namespace DemoApi.DTOs
 {
     public class ReadUserDto

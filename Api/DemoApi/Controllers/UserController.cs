@@ -5,6 +5,8 @@ using DemoApi.Data;
 using DemoApi.DTOs;
 using DemoApi.Services;
 using AutoMapper;
+using System.Security.Claims;  
+using Microsoft.AspNetCore.Authorization;
 
 namespace DemoApi.Controllers
 {
@@ -23,6 +25,7 @@ namespace DemoApi.Controllers
             _mapper = mapper;
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ReadUserDto>>> GetUsers()
         {
@@ -32,6 +35,7 @@ namespace DemoApi.Controllers
             return Ok(userDtos);
         }
 
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<ReadUserDto>> GetUserById(Guid id)
         {
@@ -46,7 +50,7 @@ namespace DemoApi.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateUser(CreateUserDto createUserDto)
+        public async Task<IActionResult> CreateUser([FromBody] CreateUserDto createUserDto)
         {
             if (!Enum.IsDefined(typeof(UserLevel), createUserDto.Level))
             {
@@ -68,11 +72,13 @@ namespace DemoApi.Controllers
             await _context.SaveChangesAsync();
 
             var response = _mapper.Map<ReadUserDto>(newUser);
-            return CreatedAtAction(nameof(GetUserById), new { id = createUserDto.Id }, response);
+
+            return CreatedAtAction(nameof(GetUserById), new { id = newUser.Id }, response);
         }
 
+        [Authorize]
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(Guid id, UpdateUserDto updateUserDto)
+        public async Task<IActionResult> PutUser(Guid id, [FromBody] UpdateUserDto updateUserDto)
         {
             if (id != updateUserDto.Id)
                 return BadRequest("L'ID ne correspond pas.");
@@ -101,7 +107,7 @@ namespace DemoApi.Controllers
             return NoContent();
         }
 
-
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(Guid id)
         {
@@ -113,6 +119,25 @@ namespace DemoApi.Controllers
             await _context.SaveChangesAsync();
 
             return NoContent();
+        }
+
+        [Authorize]
+        [HttpGet("profile")]
+        public async Task<ActionResult<ReadUserDto>> GetProfile()
+        {
+            var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
+            {
+                return Unauthorized();
+            }
+
+            var user = await _context.Users.FindAsync(userId);
+
+            if (user == null)
+                return NotFound();
+
+            return Ok(_mapper.Map<ReadUserDto>(user));
         }
     }
 }
