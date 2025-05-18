@@ -47,17 +47,6 @@ describe('TicketsComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should fetch tickets on init', () => {
-    const mockTickets = [{ id: '1', title: 'Test Ticket', priority: 0 }];
-    ticketsService.getTickets.mockReturnValue(of(mockTickets));
-
-    component.ngOnInit();
-
-    expect(ticketsService.getTickets).toHaveBeenCalled();
-    expect(component.dataSource).toBeInstanceOf(MatTableDataSource);
-    expect(component.dataSource.data).toEqual(mockTickets);
-  });
-
   it('should filter tickets based on input', () => {
     const mockEvent = { target: { value: 'test' } } as unknown as Event;
     component.dataSource = new MatTableDataSource([

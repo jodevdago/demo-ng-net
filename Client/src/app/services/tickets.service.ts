@@ -1,50 +1,39 @@
 import { Injectable } from '@angular/core';
-import {
-  addDoc,
-  collection,
-  collectionData,
-  deleteDoc,
-  doc,
-  DocumentData,
-  DocumentReference,
-  Firestore,
-  query,
-  updateDoc,
-  where,
-} from '@angular/fire/firestore';
-import { from, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Ticket } from '../types/ticket';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
+import { TicketDto } from '../types/ticketDto';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TicketsService {
-  constructor(private firestore: Firestore, private http: HttpClient) {}
+  private readonly api = environment.apiUrl;
+
+  constructor(private http: HttpClient) {}
 
   getTickets(): Observable<any[]> {
-    const usersCollection = collection(this.firestore, 'tickets');
-    return collectionData(usersCollection, { idField: 'id' });
+    return this.http.get<any[]>(this.api + '/ticket');
   }
 
-  createDocument(data: any): Observable<DocumentReference<any, DocumentData>> {
-    const ticketsCollection = collection(this.firestore, 'tickets');
-    return from(addDoc(ticketsCollection, data));
+  createTicket(data: TicketDto): Observable<TicketDto> {
+    return this.http.post<TicketDto>(this.api + '/ticket', data);
   }
 
-  deleteDocument(id: string): Observable<void> {
-    const ticketDocRef = doc(this.firestore, `tickets/${id}`);
-    return from(deleteDoc(ticketDocRef));
+  deleteTicket(id: string): Observable<void> {
+    return this.http.delete<void>(this.api + '/ticket/' + id);
   }
 
-  updateDocument(userId: string, data: any): Observable<void> {
-    const userDocRef = doc(this.firestore, `tickets/${userId}`);
-    return from(updateDoc(userDocRef, data));
+  updateTicket(id: string, data: TicketDto): Observable<void> {
+    const ticket = {
+      ...data,
+      id: id
+    }
+    return this.http.put<void>(this.api + '/ticket/' + id, ticket);
   }
 
-  getTicketsByAssignedFullname(fullname: string[]): Observable<Ticket[]> {
-    const ticketsRef = collection(this.firestore, 'tickets');
-    const q = query(ticketsRef, where('assigned.fullname', 'in', fullname));
-    return collectionData(q, { idField: 'id' }) as Observable<Ticket[]>;
+  getTicketByUsers(userIds: string[]): Observable<Ticket[]> {
+    return this.http.post<Ticket[]>(this.api + '/ticket/by-users', userIds);
   }
 }

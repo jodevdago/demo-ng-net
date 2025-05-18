@@ -1,114 +1,93 @@
 import { TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TicketsService } from './tickets.service';
-import { DocumentReference, Firestore } from '@angular/fire/firestore';
-import { from } from 'rxjs';
-import {
-  addDoc,
-  collection,
-  deleteDoc,
-  doc,
-  updateDoc,
-  collectionData,
-  query,
-  where
-} from '@angular/fire/firestore';
-
-jest.mock('@angular/fire/firestore');
+import { environment } from '../../environments/environment';
+import { TicketDto } from '../types/ticketDto';
 
 describe('TicketsService', () => {
   let service: TicketsService;
-  let firestore: jest.Mocked<Firestore>;
+  let httpMock: HttpTestingController;
+  const API = environment.apiUrl;
 
   beforeEach(() => {
-    firestore = {
-      collection: jest.fn().mockReturnValue('mockCollection'),
-    } as unknown as jest.Mocked<Firestore>;
-
     TestBed.configureTestingModule({
-      providers: [TicketsService, { provide: Firestore, useValue: firestore }],
+      imports: [HttpClientTestingModule],
+      providers: [TicketsService]
     });
-
     service = TestBed.inject(TicketsService);
+    httpMock = TestBed.inject(HttpTestingController);
   });
 
-  it('should fetch tickets from Firestore', (done) => {
-    const mockTicketData = [{ id: '1', title: 'Test Ticket' }];
-    const mockCollection = jest.fn().mockReturnValue(mockTicketData);
-    (collectionData as jest.Mock).mockReturnValue(from([mockTicketData]));
+  afterEach(() => {
+    httpMock.verify();
+  });
 
-    service.getTickets().subscribe((tickets) => {
-      expect(tickets).toEqual(mockTicketData);
-      expect(collection).toHaveBeenCalledWith(firestore, 'tickets');
-      done();
+  it('should fetch all tickets', () => {
+    const mockTickets: any[] = [{ id: '1' }, { id: '2' }];
+
+    service.getTickets().subscribe(tickets => {
+      expect(tickets.length).toBe(2);
+      expect(tickets).toEqual(mockTickets);
     });
+
+    const req = httpMock.expectOne(`${API}/ticket`);
+    expect(req.request.method).toBe('GET');
+    req.flush(mockTickets);
   });
 
-  it('should delete a document from Firestore', (done) => {
-    const mockId = 'ticket-id';
-    const mockDocRef = { id: mockId };
-    (doc as jest.Mock).mockReturnValue(mockDocRef);
-    (deleteDoc as jest.Mock).mockReturnValue(Promise.resolve());
-    service.deleteDocument(mockId).subscribe(() => {
-      expect(deleteDoc).toHaveBeenCalledWith(mockDocRef);
-      done();
+  it('should create a ticket', () => {
+    const newTicket: TicketDto = { title: 'Updated', desc: 'Updated desc', assignedId: 'user2', priority: 0, status: 'PENDING' };
+    
+    service.createTicket(newTicket).subscribe(result => {
+      expect(result).toEqual(newTicket);
     });
-    expect(doc).toHaveBeenCalledWith(firestore, `tickets/${mockId}`);
+
+    const req = httpMock.expectOne(`${API}/ticket`);
+    expect(req.request.method).toBe('POST');
+    expect(req.request.body).toEqual(newTicket);
+    req.flush(newTicket);
   });
 
-  it('should update a document in Firestore', (done) => {
-    const mockUserId = 'ticket-id';
-    const mockData = { title: 'Updated Ticket' };
-    const mockDocRef = { id: mockUserId };
-    (doc as jest.Mock).mockReturnValue(mockDocRef);
-    (updateDoc as jest.Mock).mockReturnValue(Promise.resolve());
-    service.updateDocument(mockUserId, mockData).subscribe(() => {
-      expect(updateDoc).toHaveBeenCalledWith(mockDocRef, mockData);
-      done();
+  it('should delete a ticket by id', () => {
+    const id = '123';
+
+    service.deleteTicket(id).subscribe(result => {
+      expect(result).toBeUndefined();
     });
-    expect(doc).toHaveBeenCalledWith(firestore, `tickets/${mockUserId}`);
+
+    const req = httpMock.expectOne(`${API}/ticket/${id}`);
+    expect(req.request.method).toBe('DELETE');
+    req.flush(null); // Aucun contenu attendu
   });
 
-  it('should add a document to Firestore', (done) => {
-    const mockData = { title: 'New Ticket' };
-    const mockAddDocResponse: DocumentReference<any> = {
-      id: 'new-ticket-id',
-    } as DocumentReference<any>;
+  it('should update a ticket', () => {
+    const id = '123';
+    const updateData: TicketDto = { title: 'Updated', desc: 'Updated desc', assignedId: 'user2', priority: 0, status: 'PENDING' };
 
-    (collection as jest.Mock).mockReturnValue('mockCollection');
-    (addDoc as jest.Mock).mockResolvedValue(mockAddDocResponse);
-
-    // Call the createDocument method
-    service.createDocument(mockData).subscribe((res) => {
-      expect(res).toEqual(mockAddDocResponse);
-      expect(addDoc).toHaveBeenCalledWith('mockCollection', mockData);
-      done();
+    service.updateTicket(id, updateData).subscribe(result => {
+      expect(result).toBeUndefined();
     });
-    expect(collection).toHaveBeenCalledWith(firestore, 'tickets');
+
+    const req = httpMock.expectOne(`${API}/ticket/${id}`);
+    expect(req.request.method).toBe('PUT');
+    expect(req.request.body).toEqual({ ...updateData, id });
+    req.flush(null);
   });
 
-    it('should get tickets by assigned fullname', (done) => {
-    const mockFullnames = ['John Doe', 'Jane Smith'];
-    const mockTickets = [
-      { id: '1', assigned: { fullname: 'John Doe' }, title: 'Ticket 1' },
-      { id: '2', assigned: { fullname: 'Jane Smith' }, title: 'Ticket 2' },
+  it('should get tickets by userIds', () => {
+    const userIds = ['u1', 'u2'];
+    const mockTickets: any[] = [
+      { id: '1', title: 'T1', desc: '', assignedTo: { id : 'u1'} },
+      { id: '2', title: 'T2', desc: '', assignedTo: { id: 'u2'} }
     ];
 
-    const mockCollectionRef = {};
-    const mockQuery = {};
-
-    (collection as jest.Mock).mockReturnValue(mockCollectionRef);
-    (query as jest.Mock).mockReturnValue(mockQuery);
-    (where as jest.Mock).mockImplementation(() => 'whereCondition'); // not really used, just mocked
-    (collectionData as jest.Mock).mockReturnValue(from([mockTickets]));
-
-    service.getTicketsByAssignedFullname(mockFullnames).subscribe((tickets) => {
+    service.getTicketByUsers(userIds).subscribe(tickets => {
       expect(tickets).toEqual(mockTickets);
-      expect(collection).toHaveBeenCalledWith(firestore, 'tickets');
-      expect(where).toHaveBeenCalledWith('assigned.fullname', 'in', mockFullnames);
-      expect(query).toHaveBeenCalledWith(mockCollectionRef, 'whereCondition');
-      expect(collectionData).toHaveBeenCalledWith(mockQuery, { idField: 'id' });
-      done();
     });
-  });
 
+    const req = httpMock.expectOne(`${API}/ticket/by-users`);
+    expect(req.request.method).toBe('POST');
+    expect(req.request.body).toEqual(userIds);
+    req.flush(mockTickets);
+  });
 });

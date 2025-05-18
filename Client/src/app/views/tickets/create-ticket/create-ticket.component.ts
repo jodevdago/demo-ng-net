@@ -1,5 +1,5 @@
 import { UserService } from './../../../services/user.service';
-import { ChangeDetectionStrategy, Component, DestroyRef, Inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, inject, Inject, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -18,7 +18,8 @@ import {
 import { map, Observable, of, startWith } from 'rxjs';
 import { MatDividerModule } from '@angular/material/divider';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { TicketsService } from '../../../services/tickets.service';
+import { TicketDto } from '../../../types/ticketDto';
+import { TicketsStore } from '../../../store/ticket.store';
 
 @Component({
   selector: 'app-create-ticket',
@@ -44,10 +45,11 @@ export class CreateTicketComponent implements OnInit {
   users$: Observable<any[]> = of([]);
   form: FormGroup;
 
+  store = inject(TicketsStore);
+
   constructor(
     private fb: FormBuilder,
     private usersService: UserService,
-    private ticketService: TicketsService,
     private dialogRef: MatDialogRef<CreateTicketComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private destroyRef: DestroyRef,
@@ -80,7 +82,7 @@ export class CreateTicketComponent implements OnInit {
     this.usersService.userConnected$.pipe(
       takeUntilDestroyed(this.destroyRef)
     ).subscribe(x => {
-      if (x.role == 0) {
+      if (x.role == 'Admin') {
         this.form.enable();
       } else {
         this.form.get('desc')?.disable();
@@ -97,41 +99,36 @@ export class CreateTicketComponent implements OnInit {
   }
 
   create(): void {
-    const formdata = {
-      ...this.form.value,
-      createdOn: new Date(),
+    const formdata: TicketDto = {
+      title: this.form.get('title')?.value,
+      desc: this.form.get('desc')?.value,
+      priority: this.form.get('priority')?.value,
+      status: this.form.get('status')?.value,
+      assignedId: this.form.get('assigned')?.value.id,
     };
     if (this.data) {
-      this.ticketService.updateDocument(this.data.id, formdata).pipe(
-        takeUntilDestroyed(this.destroyRef)
-      ).subscribe(x => {
-        this.form.patchValue({
-          desc: '',
-          priority: 0,
-          title: '',
-          assigned: {},
-        });
-        this.dialogRef.close();
-      })
+      this.store.updateTicket(this.data.id, formdata);
+      this.form.patchValue({
+        desc: '',
+        priority: 0,
+        title: '',
+        assigned: {},
+      });
+      this.dialogRef.close();
     } else {
-      this.ticketService
-        .createDocument(formdata)
-        .pipe(takeUntilDestroyed(this.destroyRef))
-        .subscribe((x) => {
-          this.form.patchValue({
-            desc: '',
-            priority: 0,
-            title: '',
-            assigned: {},
-          });
-          this.dialogRef.close();
-        });
+      this.store.createTicket(formdata);
+      this.form.patchValue({
+        desc: '',
+        priority: 0,
+        title: '',
+        assigned: {},
+      });
+      this.dialogRef.close();
     }
   }
 
   private _filter(name: string): User[] {
     const filterValue = name.toLowerCase();
-
     return this.options.filter(option => option.fullname.toLowerCase().includes(filterValue));
   }
 }

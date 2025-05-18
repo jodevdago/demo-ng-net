@@ -156,7 +156,7 @@ export class LoginComponent {
           this.onLogin();
         },
         error: (err) => {
-          this.errorRegistrationMessage = err.code;
+          this.errorRegistrationMessage = 'Invalid credentials';
           timer(3000)
             .pipe(takeUntilDestroyed(this.destroyRef))
             .subscribe(() => {

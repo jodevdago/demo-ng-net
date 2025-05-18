@@ -3,8 +3,9 @@ import {
   Component,
   computed,
   DestroyRef,
+  effect,
+  inject,
   OnInit,
-  signal,
   ViewChild,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
@@ -14,8 +15,6 @@ import {
 } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { TicketsService } from '../../services/tickets.service';
-import { switchMap } from 'rxjs';
 import { Ticket } from '../../types/ticket';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
@@ -28,7 +27,6 @@ import {
   trigger,
 } from '@angular/animations';
 import { CommonModule } from '@angular/common';
-import { FirestoreTimestampToDatePipe } from '../../pipes/firestore-timestamp-to-date.pipe';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { CreateTicketComponent } from './create-ticket/create-ticket.component';
 import { UserService } from '../../services/user.service';
@@ -39,6 +37,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { InitialsPipe } from '../../pipes/initials.pipe';
+import { TicketDto } from '../../types/ticketDto';
+import { TicketsStore } from '../../store/ticket.store';
 
 @Component({
   selector: 'app-tickets',
@@ -52,7 +52,6 @@ import { InitialsPipe } from '../../pipes/initials.pipe';
     MatSortModule,
     MatPaginatorModule,
     CommonModule,
-    FirestoreTimestampToDatePipe,
     MatDialogModule,
     DragDropModule,
     MatButtonToggleModule,
@@ -83,6 +82,8 @@ import { InitialsPipe } from '../../pipes/initials.pipe';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TicketsComponent implements OnInit {
+  private store = inject(TicketsStore);
+
   columnsToDisplay: string[] = [
     'id',
     'title',
@@ -98,47 +99,49 @@ export class TicketsComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
   @ViewChild(MatSort) sort: MatSort | null = null;
 
-  tickets = signal<Ticket[]>([]);
+  tickets = this.store.tickets;
   pending = computed(() => this.tickets().filter(t => t.status === 'PENDING'));
   inProgress = computed(() => this.tickets().filter(t => t.status === 'INPROGRESS'));
   finished = computed(() => this.tickets().filter(t => t.status === 'FINISHED'));
   closed = computed(() => this.tickets().filter(t => t.status === 'CLOSED'));
-
 
   displayTable = true;
   isAdmin = false;
   user$;
   usersList$;
 
-  assignedTo = new FormControl([]);
+  assignedTo = new FormControl<string[]>([]);
 
   constructor(
-    private service: TicketsService,
     public createDialog: MatDialog,
     private userService: UserService,
     private destroyRef: DestroyRef,
   ) {
     this.user$ = this.userService.userConnected$;
     this.usersList$ = this.userService.getUsers();
+
+    effect(() => {
+      const tickets = this.tickets();
+      this.dataSource = new MatTableDataSource(tickets);
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+    });
   }
 
   ngOnInit(): void {
     this.assignedTo.valueChanges.pipe(
-      takeUntilDestroyed(this.destroyRef),
-      switchMap(users => {
-        if (users && users.length > 0) {
-          return this.service.getTicketsByAssignedFullname([...users]);
-        } else {
-          return this.service.getTickets();
-        }
-      })
-    ).subscribe((tickets) => {
-      this.dataSource = new MatTableDataSource(tickets);
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
-      this.tickets.set(tickets);
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe((userIds) => {
+      this.store.loadTicketsByUserIds(userIds || []);
     });
-    this.assignedTo.setValue([]);
+
+    this.userService.userConnected$.pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe((user) => {
+      if (user.id) {
+        this.assignedTo.setValue([user.id])
+      }
+    });
   }
 
   applyFilter(event: Event): void {
@@ -159,9 +162,7 @@ export class TicketsComponent implements OnInit {
   }
 
   onDeleteTicket(id: string): void {
-    this.service.deleteDocument(id).pipe(
-      takeUntilDestroyed(this.destroyRef)
-    ).subscribe()
+    this.store.deleteTicket(id);
   }
 
   drop(event: CdkDragDrop<Ticket[]>): void {
@@ -182,11 +183,14 @@ export class TicketsComponent implements OnInit {
       // 🔥 Update Firestore
       const ticketId = ticket.id ? ticket.id : null;
       if (ticketId) {
-        this.service.updateDocument(ticketId, ticket).pipe(
-          takeUntilDestroyed(this.destroyRef)
-        ).subscribe(() => {
-          this.tickets.set([...this.tickets()]);
-        });
+        const ticketDto: TicketDto = {
+          title: ticket.title,
+          desc: ticket.desc,
+          priority: ticket.priority,
+          status: ticket.status,
+          assignedId: ticket.assigned.id || '',
+        }
+        this.store.updateTicket(ticketId, ticketDto);
       }
     }
   }

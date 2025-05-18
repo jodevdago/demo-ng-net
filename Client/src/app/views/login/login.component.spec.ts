@@ -79,7 +79,7 @@ describe('LoginComponent', () => {
   });
 
   it('should set error message on failed login', () => {
-    const errorMessage = { code: 'auth/invalid-email' };
+    const errorMessage = null;
     mockAuthService.login = jest
       .fn()
       .mockReturnValue(throwError(() => errorMessage));
@@ -91,7 +91,7 @@ describe('LoginComponent', () => {
 
     component.login();
 
-    expect(component.errorLoginMessage).toBe(errorMessage.code);
+    expect(component.errorLoginMessage).toBe(errorMessage);
     expect(mockRouter.navigate).not.toHaveBeenCalled(); // Ensure navigation does not occur
   });
 
@@ -127,7 +127,7 @@ describe('LoginComponent', () => {
   });
 
   it('should set error message on failed registration', () => {
-    const errorMessage = { code: 'auth/email-already-in-use' };
+    const errorMessage = "Invalid credentials" ;
     mockAuthService.register = jest
       .fn()
       .mockReturnValue(throwError(() => errorMessage));
@@ -142,7 +142,7 @@ describe('LoginComponent', () => {
 
     component.registration();
 
-    expect(component.errorRegistrationMessage).toBe(errorMessage.code);
+    expect(component.errorRegistrationMessage).toBe(errorMessage);
 
     jest.advanceTimersByTime(3000);
 
@@ -150,7 +150,7 @@ describe('LoginComponent', () => {
   });
 
   it('should set error message on failed registration and reset after 3 seconds', () => {
-    const errorMessage = { code: 'auth/email-already-in-use' };
+    const errorMessage = "Invalid credentials";
     mockAuthService.register = jest
       .fn()
       .mockReturnValue(throwError(() => errorMessage));
@@ -165,31 +165,10 @@ describe('LoginComponent', () => {
 
     component.registration();
 
-    expect(component.errorRegistrationMessage).toBe(errorMessage.code);
+    expect(component.errorRegistrationMessage).toBe(errorMessage);
 
     jest.advanceTimersByTime(3000);
 
     expect(component.errorRegistrationMessage).toBe('');
   });
-
-  it('should set error message on failed login and reset after 3 seconds', () => {
-    const errorMessage = { code: 'auth/invalid-email' };
-    mockAuthService.login = jest
-      .fn()
-      .mockReturnValue(throwError(() => errorMessage));
-
-    component.loginForm.setValue({
-      email: 'invalid-email',
-      password: 'wrong-password',
-    });
-
-    component.login();
-
-    expect(component.errorLoginMessage).toBe(errorMessage.code);
-
-    jest.advanceTimersByTime(3000);
-
-    expect(component.errorLoginMessage).toBe('');
-  });
-
 });

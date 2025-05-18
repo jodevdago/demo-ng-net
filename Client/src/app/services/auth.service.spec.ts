@@ -1,101 +1,87 @@
 import { TestBed } from '@angular/core/testing';
 import { AuthService } from './auth.service';
-import { Auth } from '@angular/fire/auth';
-import { Firestore } from '@angular/fire/firestore';
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  signOut,
-  UserCredential,
-} from 'firebase/auth';
-import { User } from '../types/user';
-import { doc, setDoc } from '@angular/fire/firestore';
-
-jest.mock('firebase/auth');
-jest.mock('@angular/fire/firestore');
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from './storage.service';
+import { Router } from '@angular/router';
+import { of } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 describe('AuthService', () => {
-  let authService: AuthService;
-  let mockAuth: Auth;
-  let mockFirestore: Firestore;
+  let service: AuthService;
+  let httpMock: jest.Mocked<HttpClient>;
+  let storageMock: jest.Mocked<StorageService>;
+  let routerMock: jest.Mocked<Router>;
 
   beforeEach(() => {
+    const httpClientMock = { post: jest.fn() };
+    const storageServiceMock = { removeItem: jest.fn() };
+    const routerServiceMock = { navigate: jest.fn() };
+
     TestBed.configureTestingModule({
       providers: [
         AuthService,
-        { provide: Auth, useValue: {} },
-        { provide: Firestore, useValue: {} },
+        { provide: HttpClient, useValue: httpClientMock },
+        { provide: StorageService, useValue: storageServiceMock },
+        { provide: Router, useValue: routerServiceMock },
       ],
     });
 
-    authService = TestBed.inject(AuthService);
-    mockAuth = TestBed.inject(Auth);
-    mockFirestore = TestBed.inject(Firestore);
+    service = TestBed.inject(AuthService);
+    httpMock = TestBed.inject(HttpClient) as jest.Mocked<HttpClient>;
+    storageMock = TestBed.inject(StorageService) as jest.Mocked<StorageService>;
+    routerMock = TestBed.inject(Router) as jest.Mocked<Router>;
   });
 
-  it('should register a user', (done) => {
-    const mockUserCredential: Partial<UserCredential> = {
-      user: { uid: '123', email: 'test@example.com' } as any,
-    };
-    const mockRegistration: User = {
+  it('should be created', () => {
+    expect(service).toBeTruthy();
+  });
+
+  it('should call register() with correct data', () => {
+    const fullname = 'John Doe';
+    const email = 'john@example.com';
+    const password = 'securepass';
+    const level = 2;
+
+    const expectedDto = {
       auth: false,
       role: 1,
-      level: 1,
-      email: 'test@example.com',
-      fullname: 'Full Name',
+      level,
+      email,
+      fullname,
+      password,
     };
 
-    // Mock Firebase functions
-    (createUserWithEmailAndPassword as jest.Mock).mockResolvedValue(
-      mockUserCredential
-    );
-    (setDoc as jest.Mock).mockResolvedValue(undefined);
+    httpMock.post.mockReturnValue(of(void 0));
 
-    authService
-      .register('Full Name', 'test@example.com', 'password', 1)
-      .subscribe(() => {
-        expect(createUserWithEmailAndPassword).toHaveBeenCalledWith(
-          mockAuth,
-          'test@example.com',
-          'password'
-        );
-        expect(setDoc).toHaveBeenCalledWith(
-          doc(mockFirestore, `users/123`),
-          mockRegistration,
-          { merge: true }
-        );
-        done();
-      });
-  });
-
-  it('should login a user', (done) => {
-    const mockUserCredential: Partial<UserCredential> = {
-      user: { uid: '123', email: 'test@example.com' } as any,
-    };
-
-    // Mock Firebase function
-    (signInWithEmailAndPassword as jest.Mock).mockResolvedValue(
-      mockUserCredential
-    );
-
-    authService.login('test@example.com', 'password').subscribe((res) => {
-      expect(signInWithEmailAndPassword).toHaveBeenCalledWith(
-        mockAuth,
-        'test@example.com',
-        'password'
-      );
-      expect(res.user.uid).toEqual('123');
-      done();
+    service.register(fullname, email, password, level).subscribe((res) => {
+      expect(res).toBeUndefined();
     });
+
+    expect(httpMock.post).toHaveBeenCalledWith(`${environment.apiUrl}/user`, expectedDto);
   });
 
-  it('should logout a user', (done) => {
-    // Mock Firebase function
-    (signOut as jest.Mock).mockResolvedValue(undefined);
+  it('should call login() with correct credentials', () => {
+    const email = 'john@example.com';
+    const password = 'password123';
+    const mockResponse = { token: 'mockToken' };
 
-    authService.logout().subscribe(() => {
-      expect(signOut).toHaveBeenCalledWith(mockAuth);
-      done();
+    httpMock.post.mockReturnValue(of(mockResponse));
+
+    service.login(email, password).subscribe((res) => {
+      expect(res).toEqual(mockResponse);
+    });
+
+    expect(httpMock.post).toHaveBeenCalledWith(`${environment.apiUrl}/login`, { email, password });
+  });
+
+  it('should call logout() and remove JWT from storage', () => {
+    const result = service.logout();
+
+    expect(storageMock.removeItem).toHaveBeenCalledWith('jwt');
+    expect(routerMock.navigate).toHaveBeenCalledWith(['./login']);
+
+    result.subscribe((res) => {
+      expect(res).toBeUndefined();
     });
   });
 });

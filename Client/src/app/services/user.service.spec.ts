@@ -1,80 +1,72 @@
 import { TestBed } from '@angular/core/testing';
-import { collection, collectionData, doc, Firestore, updateDoc } from '@angular/fire/firestore';
+import { HttpClient } from '@angular/common/http';
 import { UserService } from './user.service';
-import { of, throwError } from 'rxjs';
+import { environment } from '../../environments/environment';
+import { of } from 'rxjs';
+import { User } from '../types/user';
 
-jest.mock('firebase/auth');
-jest.mock('@angular/fire/firestore');
-
-describe('AuthService', () => {
-  let userService: UserService;
-  let mockFirestore: Firestore;
-
-  // Mock data for users
-  const mockUsers = [
-    { id: '1', name: 'John Doe' },
-    { id: '2', name: 'Jane Smith' },
-  ];
-
-  // Mocking Firestore collection and collectionData
-  const mockCollection = {
-    id: 'users',
-    data: jest.fn(() => of(mockUsers)), // Mock the data returned from collectionData
-  };
+describe('UserService', () => {
+  let service: UserService;
+  let httpMock: jest.Mocked<HttpClient>;
 
   beforeEach(() => {
+    const httpClientMock = {
+      get: jest.fn(),
+      put: jest.fn(),
+    };
+
     TestBed.configureTestingModule({
       providers: [
         UserService,
-        { provide: Firestore, useValue: {} },
+        { provide: HttpClient, useValue: httpClientMock },
       ],
     });
 
-    userService = TestBed.inject(UserService);
-    mockFirestore = TestBed.inject(Firestore);
+    service = TestBed.inject(UserService);
+    httpMock = TestBed.inject(HttpClient) as jest.Mocked<HttpClient>;
   });
 
-  it('should fetch users collection data', (done) => {
-    // Mock collection and collectionData methods
-    (collection as jest.Mock).mockReturnValue(mockCollection);
-    (collectionData as jest.Mock).mockReturnValue(of(mockUsers));
+  it('should be created', () => {
+    expect(service).toBeTruthy();
+  });
 
-    userService.getUsers().subscribe((users) => {
+  it('should call getUsers() with correct URL', () => {
+    const mockUsers = [{ id: '1', name: 'John' }];
+    httpMock.get.mockReturnValue(of(mockUsers));
+
+    service.getUsers().subscribe((users) => {
       expect(users).toEqual(mockUsers);
-      expect(collection).toHaveBeenCalledWith(mockFirestore, 'users');
-      done();
     });
+
+    expect(httpMock.get).toHaveBeenCalledWith(environment.apiUrl + '/user');
   });
 
-  it('should update user auth field successfully', (done) => {
+  it('should call updateUserField() with correct URL and data', () => {
     const userId = '123';
-    const fieldValue = true;
+    const user: User = { id: userId, fullname: 'Alice', auth: true, email: 'test@test.com', level: 3, role: 1 };
+    httpMock.put.mockReturnValue(of(void 0));
 
-    const mockDocRef = { id: userId }; // Mock document reference
-    (doc as jest.Mock).mockReturnValue(mockDocRef); // Mock the doc method
-    (updateDoc as jest.Mock).mockImplementation(() => of(void 0)); // Mock the updateDoc method
-
-    userService.updateUserField(userId, fieldValue).subscribe(() => {
-      expect(updateDoc).toHaveBeenCalledWith(mockDocRef, { auth: fieldValue }); // Verify update was called
-      done();
+    service.updateUserField(userId, user).subscribe((res) => {
+      expect(res).toBeUndefined();
     });
+
+    expect(httpMock.put).toHaveBeenCalledWith(environment.apiUrl + '/user/' + userId, user);
   });
 
-  it('should handle error when updating user auth field', (done) => {
-    const userId = '123';
-    const fieldValue = true;
-    const error = new Error('Update failed');
+  it('should call getProfile() with correct URL', () => {
+    const mockProfile: User = { id: '123', fullname: 'Alice', auth: true, email: 'test@test.com', level: 3, role: 1 };
+    httpMock.get.mockReturnValue(of(mockProfile));
 
-    const mockDocRef = { id: userId }; // Mock document reference
-    (doc as jest.Mock).mockReturnValue(mockDocRef); // Mock the doc method
-    (updateDoc as jest.Mock).mockImplementation(() => throwError(() => error)); // Mock error on updateDoc
+    service.getProfile().subscribe((profile) => {
+      expect(profile).toEqual(mockProfile);
+    });
 
-    userService.updateUserField(userId, fieldValue).subscribe({
-      next: () => {},
-      error: (err) => {
-        expect(err).toEqual(error);
-        done();
-      },
+    expect(httpMock.get).toHaveBeenCalledWith(environment.apiUrl + '/user/profile');
+  });
+
+  it('should have a default value for userConnected$', () => {
+    service.userConnected$.subscribe(value => {
+      expect(value).toEqual({});
     });
   });
 });

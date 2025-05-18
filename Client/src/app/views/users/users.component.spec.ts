@@ -7,7 +7,7 @@ import { User } from '../../types/user';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 class MockUserService {
-  getUsers = jest.fn().mockReturnValue(of([{ id: '1', email: 'test@example.com', fullname: 'Test User', level: 1, role: 'User', auth: true }]));
+  getUsers = jest.fn().mockReturnValue(of([{ id: '1', email: 'test@example.com', fullname: 'Test User', level: 1, role: 'User', auth: false }]));
   updateUserField = jest.fn().mockReturnValue(of(void 0));
 }
 
@@ -48,10 +48,25 @@ describe('UsersComponent', () => {
   });
 
   it('should toggle auth status on change', () => {
-    const user: User = { id: '1', email: 'test@example.com', fullname: 'Test User', level: 1, role: 1, auth: true };
+    const user: User = {
+      id: '1',
+      email: 'test@example.com',
+      fullname: 'Test User',
+      level: 1,
+      role: 1,
+      auth: true
+    };
+
+    const expectedUpdatedUser: User = {
+      ...user,
+      auth: false
+    };
+
     component.change(user);
-    expect(mockUserService.updateUserField).toHaveBeenCalledWith('1', false);
+
+    expect(mockUserService.updateUserField).toHaveBeenCalledWith('1', expectedUpdatedUser);
   });
+
 
   it('should reset paginator to first page after filtering', () => {
     const paginatorSpy = jest.spyOn(MatPaginator.prototype, 'firstPage');

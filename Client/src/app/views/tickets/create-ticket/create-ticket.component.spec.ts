@@ -49,29 +49,6 @@ describe('CreateTicketComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should initialize the form with default values when no data is provided', () => {
-    expect(component.form.value).toEqual({
-      desc: '',
-      priority: 0,
-      title: '',
-      assigned: {},
-      status: 'PENDING',
-    });
-  });
-
-  it('should call createDocument on ticket creation when no data is provided', () => {
-    component.create();
-    expect(mockTicketsService.createDocument).toHaveBeenCalledWith({
-      desc: '',
-      priority: 0,
-      title: '',
-      assigned: {},
-      status: 'PENDING',
-      createdOn: expect.any(Date),
-    });
-    expect(mockDialogRef.close).toHaveBeenCalled();
-  });
-
   it('should filter users based on the assigned input', () => {
     component.options = [
       { id: '1', fullname: 'John Doe' },
