@@ -22,12 +22,12 @@ namespace DemoApi.Controllers
 
         [Authorize]
         [HttpGet]
-        public async Task<ActionResult<List<ReadTicketDto>>> GetAll() =>
+        public async Task<ActionResult<List<ReadTicketDto>>> GetAllTickets() =>
             Ok(await _ticketService.GetAllTicketsAsync());
 
         [Authorize]
         [HttpGet("{id}")]
-        public async Task<ActionResult<ReadTicketDto>> GetById(Guid id)
+        public async Task<ActionResult<ReadTicketDto>> GetTicketById(Guid id)
         {
             var ticket = await _ticketService.GetTicketByIdAsync(id);
             return ticket == null ? NotFound() : Ok(ticket);
@@ -35,7 +35,7 @@ namespace DemoApi.Controllers
 
         [Authorize]
         [HttpPost]
-        public async Task<ActionResult<ReadTicketDto>> Create([FromBody] CreateTicketDto dto)
+        public async Task<ActionResult<ReadTicketDto>> CreateTicket([FromBody] CreateTicketDto dto)
         {
             var ticket = await _ticketService.CreateTicketAsync(dto);
             return CreatedAtAction(nameof(GetById), new { id = ticket.Id }, ticket);
@@ -43,7 +43,7 @@ namespace DemoApi.Controllers
 
         [Authorize]
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(Guid id, [FromBody] UpdateTicketDto dto)
+        public async Task<IActionResult> UpdateTicket(Guid id, [FromBody] UpdateTicketDto dto)
         {
             if (id != dto.Id) return BadRequest("ID mismatch.");
             var result = await _ticketService.UpdateTicketAsync(dto);
@@ -52,7 +52,7 @@ namespace DemoApi.Controllers
 
         [Authorize(Policy = "AdminOnly")]
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(Guid id)
+        public async Task<IActionResult> DeleteTicket(Guid id)
         {
             var result = await _ticketService.DeleteTicketAsync(id);
             return result ? NoContent() : NotFound();
@@ -60,12 +60,12 @@ namespace DemoApi.Controllers
 
         [Authorize]
         [HttpGet("by-user/{userId}")]
-        public async Task<ActionResult<List<ReadTicketDto>>> GetByUser(Guid userId) =>
+        public async Task<ActionResult<List<ReadTicketDto>>> GetTicketByUser(Guid userId) =>
             Ok(await _ticketService.GetTicketsByUserIdAsync(userId));
 
         [Authorize]
         [HttpPost("by-users")]
-        public async Task<ActionResult<List<ReadTicketDto>>> GetByUsers([FromBody] List<Guid> userIds) =>
+        public async Task<ActionResult<List<ReadTicketDto>>> GetTicketByUsers([FromBody] List<Guid> userIds) =>
             Ok(await _ticketService.GetTicketsByUserIdsAsync(userIds));
     }
 }
