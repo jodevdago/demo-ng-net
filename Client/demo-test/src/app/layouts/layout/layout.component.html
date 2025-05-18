@@ -1,0 +1,20 @@
+<mat-sidenav-container autosize>
+  <mat-sidenav
+    #sidenav
+    mode="side"
+    opened="true"
+    [style.width]="isExpanded ? '225px' : '60px'"
+  >
+    <app-sidenav
+      (toggleMenu)="toggleMenu()"
+      [isExpanded]="isExpanded"
+    ></app-sidenav>
+
+  </mat-sidenav>
+
+  <mat-sidenav-content [style.margin-left.px]="isExpanded ? 225 : 60">
+    <div class="content-container">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
