@@ -21,6 +21,8 @@ namespace DemoApi.Models
         [Required]
         public required string Password { get; set; }
 
+        public ICollection<Ticket>? Tickets { get; set; }
+
         public User() { }
 
         public User(string fullname, string email, UserLevel level)
