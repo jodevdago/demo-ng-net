@@ -1,20 +1,22 @@
 import { inject } from '@angular/core';
 import { UserService } from '../services/user.service';
-import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
+import { map, take } from 'rxjs/operators';
 
 export const userGuard = () => {
   const userService = inject(UserService);
   const router = inject(Router);
 
-  return new Observable<boolean>((observer) => {
-    userService.userConnected$.subscribe((x) => {
-      if (x.role == 0) {
-        observer.next(true);
+  return userService.userConnected$.pipe(
+    take(1),
+    map((user) => {
+      if (user?.role === 'Admin') {
+        return true;
       } else {
-        router.navigate(['./layout']);
-        observer.next(false);
+        router.navigate(['/layout']);
+        return false;
       }
-    });
-  });
+    })
+  );
 };
+

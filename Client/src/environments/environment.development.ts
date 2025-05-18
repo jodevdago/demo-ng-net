@@ -6,5 +6,7 @@ export const environment = {
     storageBucket: 'it-support-86d27.appspot.com',
     messagingSenderId: '595565690931',
     appId: '1:595565690931:web:035780d7fd14a430d86346',
-  }
+  },
+  production: false,
+  apiUrl:  'https://localhost:7172/api'
 };

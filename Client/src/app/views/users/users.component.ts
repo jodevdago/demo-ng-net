@@ -12,6 +12,7 @@ import { UserService } from '../../services/user.service';
 import { User } from '../../types/user';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-users',
@@ -24,6 +25,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     MatSortModule,
     MatPaginatorModule,
     MatSlideToggleModule,
+    MatButtonModule,
   ],
   templateUrl: './users.component.html',
   styleUrl: './users.component.scss',
@@ -65,8 +67,8 @@ export class UsersComponent implements OnInit {
 
   change(row: User): void {
     const id = <string> row.id;
-    const auth = !row.auth;
-    this.service.updateUserField(id, auth).pipe(
+    row.auth = !row.auth;
+    this.service.updateUserField(id, row).pipe(
       takeUntilDestroyed(this.destroyRef)
     ).subscribe();
   }

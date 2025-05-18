@@ -25,6 +25,8 @@ import { AuthService } from '../../services/auth.service';
 import { timer } from 'rxjs';
 import { Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { StorageService } from '../../services/storage.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
@@ -85,6 +87,7 @@ export class LoginComponent {
     private authService: AuthService,
     private router: Router,
     private destroyRef: DestroyRef,
+    private storage: StorageService,
   ) {
     this.registrationForm = this.fb.group({
       email: ['', Validators.required],
@@ -169,13 +172,17 @@ export class LoginComponent {
         this.loginForm.get('email')?.value,
         this.loginForm.get('password')?.value
       )
-      .pipe(takeUntilDestroyed(this.destroyRef))
+      .pipe(
+        takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: () => {
+        next: (res) => {
+          this.storage.setItem('jwt', res.token);
           this.router.navigate(['./layout']);
         },
-        error: (err) => {
-          this.errorLoginMessage = err.code;
+        error: (err: HttpErrorResponse) => {
+          if(err.status == 401 || err.status == 400) {
+            this.errorLoginMessage = 'Invalid credentials';
+          }
           timer(3000)
             .pipe(takeUntilDestroyed(this.destroyRef))
             .subscribe(() => {

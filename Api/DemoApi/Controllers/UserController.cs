@@ -61,7 +61,7 @@ namespace DemoApi.Controllers
             try
             {
                 var updated = await _userService.UpdateUserAsync(dto);
-                return updated ? NoContent() : NotFound();
+                return updated ? Ok() : NotFound();
             }
             catch (ArgumentException ex)
             {

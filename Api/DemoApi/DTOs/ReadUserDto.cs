@@ -7,5 +7,6 @@ namespace DemoApi.DTOs
         public required string Email { get; set; }
         public required UserRole Role { get; set; } = UserRole.User;
         public required UserLevel Level { get; set; }
+        public required bool Auth { get; set; }
     }
 }

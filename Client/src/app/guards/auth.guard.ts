@@ -1,50 +1,38 @@
-import { inject } from '@angular/core';
-import { Auth, onAuthStateChanged } from '@angular/fire/auth';
-import { doc, Firestore, getDoc } from '@angular/fire/firestore';
+import { DestroyRef, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { catchError, from, map, Observable, of } from 'rxjs';
 import { UserService } from '../services/user.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { StorageService } from '../services/storage.service';
+import { of } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 
 export const AuthGuard = () => {
-  const auth = inject(Auth);
-  const firestore = inject(Firestore);
+  const destroyRef = inject(DestroyRef);
   const router = inject(Router);
   const userService = inject(UserService);
+  const storage = inject(StorageService);
 
-  return new Observable<boolean>((observer) => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        const userDocRef = doc(firestore, `users/${user.uid}`);
-        from(getDoc(userDocRef))
-          .pipe(
-            map((userDoc) => {
-              if (userDoc.exists()) {
-                const userData = userDoc.data();
-                userService.userConnected$.next(userData);
-                return userData && userData['auth'] === true;
-              } else {
-                return false;
-              }
-            }),
-            catchError((error) => {
-              console.error('Error retrieving Firestore document', error);
-              return of(false);
-            })
-          )
-          .subscribe((authValid) => {
-            if (authValid) {
-              observer.next(true);
-            } else {
-              router.navigate(['./unauthorized']);
-              observer.next(false);
-            }
-            observer.complete();
-          });
+  const token = storage.getItem('jwt');
+
+  if (!token) {
+    router.navigate(['/login']);
+    return of(false);
+  }
+
+  return userService.getProfile().pipe(
+    takeUntilDestroyed(destroyRef),
+    map((user) => {
+      if (user && user.auth) {
+        userService.userConnected$.next(user);
+        return true;
       } else {
-        router.navigate(['./login']);
-        observer.next(false);
-        observer.complete();
+        router.navigate(['/unauthorized']);
+        return false;
       }
-    });
-  });
+    }),
+    catchError((err) => {
+      router.navigate(['/unauthorized']);
+      return of(false);
+    })
+  );
 };

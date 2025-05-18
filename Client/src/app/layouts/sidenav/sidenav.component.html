@@ -1,8 +1,5 @@
 <section [style.height]="'100vh'" [style.backgroundColor]="'#D7E3FF'" class="relative">
   <div class="toggle flex flex-col justify-center items-center">
-    <!-- <mat-icon (click)="toggleMenu.emit(null)">
-      {{ isExpanded ? "keyboard_backspace" : "dehaze" }}
-    </mat-icon> -->
     <div class="font-bold">{{ (user$ | async).fullname | titlecase }}</div>
     <div>
       <mat-icon>supervised_user_circle</mat-icon>
@@ -14,7 +11,7 @@
   </div>
 
 
-  @for (route of (user$ | async).role == 0 ? routeLinksAdmin : routeLinks; track $index) {
+  @for (route of (user$ | async).role == 'Admin' ? routeLinksAdmin : routeLinks; track $index) {
     <mat-list class="nav m-0 p-0">
       <a
         mat-list-item

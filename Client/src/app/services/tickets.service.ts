@@ -14,12 +14,13 @@ import {
 } from '@angular/fire/firestore';
 import { from, Observable } from 'rxjs';
 import { Ticket } from '../types/ticket';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TicketsService {
-  constructor(private firestore: Firestore) {}
+  constructor(private firestore: Firestore, private http: HttpClient) {}
 
   getTickets(): Observable<any[]> {
     const usersCollection = collection(this.firestore, 'tickets');

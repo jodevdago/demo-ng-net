@@ -1,29 +1,27 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import {
-  collection,
-  collectionData,
-  doc,
-  Firestore,
-  updateDoc,
-} from '@angular/fire/firestore';
-import { BehaviorSubject, from, Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
+import { User } from '../types/user';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
+  private readonly api = environment.apiUrl;
   userConnected$ = new BehaviorSubject<any>({});
 
-  constructor(private firestore: Firestore) {}
+  constructor(private http: HttpClient) {}
 
   getUsers(): Observable<any[]> {
-    const usersCollection = collection(this.firestore, 'users');
-    return collectionData(usersCollection, { idField: 'id' });
+    return this.http.get<any[]>(this.api + '/user');
   }
 
-  updateUserField(userId: string, fieldValue: boolean): Observable<void> {
-    const userDocRef = doc(this.firestore, `users/${userId}`);
-    const updateData = { auth: fieldValue };
-    return from(updateDoc(userDocRef, updateData));
+  updateUserField(userId: string, user: User): Observable<void> {
+    return this.http.put<void>(this.api + '/user/' + userId, user);
+  }
+
+  getProfile(): Observable<User> {
+    return this.http.get<User>(this.api + '/user/profile');
   }
 }

@@ -38,7 +38,7 @@ namespace DemoApi.Controllers
         public async Task<ActionResult<ReadTicketDto>> CreateTicket([FromBody] CreateTicketDto dto)
         {
             var ticket = await _ticketService.CreateTicketAsync(dto);
-            return CreatedAtAction(nameof(GetById), new { id = ticket.Id }, ticket);
+            return CreatedAtAction(nameof(GetTicketById), new { id = ticket.Id }, ticket);
         }
 
         [Authorize]
