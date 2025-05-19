@@ -51,8 +51,6 @@
                 }
               ],
               "allowedCommonJsDependencies": [
-                "@firebase/auth",
-                "@firebase/firestore",
                 "undici",
                 "@grpc/grpc-js",
                 "@grpc/proto-loader"

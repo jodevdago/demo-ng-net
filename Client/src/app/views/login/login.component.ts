@@ -177,7 +177,7 @@ export class LoginComponent {
       .subscribe({
         next: (res) => {
           this.storage.setItem('jwt', res.token);
-          this.router.navigate(['./layout']);
+          this.router.navigate(['./layout/tickets']);
         },
         error: (err: HttpErrorResponse) => {
           if(err.status == 401 || err.status == 400) {

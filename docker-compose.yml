@@ -1,0 +1,22 @@
+services:
+  angular:
+    build:
+      context: ./Client
+      dockerfile: Dockerfile
+    volumes:
+      - ./Client:/app
+      - /app/node_modules
+    ports:
+      - "4200:4200"
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+
+  dotnet:
+    build:
+      context: ./Api/DemoApi
+      dockerfile: Dockerfile
+    ports:
+      - "5027:5027"
+    volumes:
+      - ./Api/DemoApi:/src
+    command: dotnet watch run --urls https://0.0.0.0:5027

@@ -15,7 +15,7 @@ import { AuthService } from '../../services/auth.service';
     MatIconModule,
     MatTooltipModule,
     CommonModule,
-    RouterModule
+    RouterModule,
   ],
   templateUrl: './sidenav.component.html',
   styleUrl: './sidenav.component.scss',

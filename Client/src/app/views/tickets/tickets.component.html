@@ -158,7 +158,8 @@
 @if (!displayTable) {
 <div cdkDropListGroup class="board mt-[20px]">
   <div class="column" *ngFor="let list of ['pending', 'inProgress', 'finished', 'closed']">
-    <p class="capitalize board-title">{{ list == 'inProgress' ? 'In progress' : list }} ({{getListByName(list).length}}/{{this.tickets().length}})
+    <p class="capitalize board-title">{{ list == 'inProgress' ? 'In progress' : list }}
+      <i>({{getListByName(list).length}}/{{this.tickets().length}})</i>
     </p>
     <div cdkDropList [id]="list" [cdkDropListData]="getListByName(list)" class="ticket-list"
       (cdkDropListDropped)="drop($event)">
