@@ -21,7 +21,3 @@ src/
 ```
 
 This folder structure supports scalability, separation of concerns, and easier navigation through your codebase.
-
----
-
-📌 **Best Practice:** Rename this file to `README.storage.md` if you want to isolate documentation specifically related to `StorageService` in a large project.
