@@ -1,8 +1,8 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { RouterLink } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
@@ -13,9 +13,9 @@ import { AuthService } from '../../services/auth.service';
   imports: [
     MatListModule,
     MatIconModule,
-    RouterLink,
     MatTooltipModule,
     CommonModule,
+    RouterModule
   ],
   templateUrl: './sidenav.component.html',
   styleUrl: './sidenav.component.scss',

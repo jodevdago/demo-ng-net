@@ -32,3 +32,10 @@ mat-sidenav[style] {
 .mat-drawer {
   transform: none !important;
 }
+
+.mat-accent.mat-mdc-slide-toggle {
+  --mdc-switch-selected-track-color: #d7e3ff;
+  --mdc-switch-selected-hover-track-color: #a8a9c0;
+  --mdc-switch-selected-focus-track-color: #c6c7e2;
+  --mdc-switch-selected-pressed-track-color: #a8a9c0;
+}

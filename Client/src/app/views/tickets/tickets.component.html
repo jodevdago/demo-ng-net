@@ -1,4 +1,4 @@
-<div class="header flex justify-between">
+<div class="header flex justify-between" style="height: 60px;">
   <h4>Tickets</h4>
   @if (displayTable) {
   <mat-form-field [style.width]="'40%'">
@@ -18,6 +18,20 @@
     <mat-button-toggle [value]="true"><mat-icon>table_rows</mat-icon></mat-button-toggle>
     <mat-button-toggle [value]="false"><mat-icon>view_module</mat-icon></mat-button-toggle>
   </mat-button-toggle-group>
+  <div>
+    <button class="btn-level-stat pending" mat-raised-button>
+      Pending: {{ this.pending().length / this.tickets().length || 0 | percent }}
+    </button>
+    <button class="btn-level-stat inprogress" mat-raised-button>
+      In progress: {{ this.inProgress().length / this.tickets().length || 0 | percent }}
+    </button>
+    <button class="btn-level-stat finished" mat-raised-button>
+      Finished: {{ this.finished().length / this.tickets().length || 0 | percent }}
+    </button>
+    <button class="btn-level-stat closed" mat-raised-button>
+      Closed: {{ this.closed().length / this.tickets().length || 0 | percent }}
+    </button>
+  </div>
   <mat-form-field class="mt-[10px]">
     <mat-label>Assigned to</mat-label>
     <mat-select [formControl]="assignedTo" multiple>
@@ -144,7 +158,7 @@
 @if (!displayTable) {
 <div cdkDropListGroup class="board mt-[20px]">
   <div class="column" *ngFor="let list of ['pending', 'inProgress', 'finished', 'closed']">
-    <p class="capitalize board-title">{{ list == 'inProgress' ? 'In progress' : list }} ({{getListByName(list).length}})
+    <p class="capitalize board-title">{{ list == 'inProgress' ? 'In progress' : list }} ({{getListByName(list).length}}/{{this.tickets().length}})
     </p>
     <div cdkDropList [id]="list" [cdkDropListData]="getListByName(list)" class="ticket-list"
       (cdkDropListDropped)="drop($event)">

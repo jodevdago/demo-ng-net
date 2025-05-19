@@ -12,6 +12,7 @@ import { environment } from '../environments/environment';
 import { HTTP_INTERCEPTORS, provideHttpClient, withFetch, withInterceptorsFromDi } from '@angular/common/http';
 import { AppInterceptor } from './app.interceptor';
 import { HttpErrorInterceptor } from './http-error.interceptor';
+import { LoaderInterceptor } from './loader.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -33,5 +34,10 @@ export const appConfig: ApplicationConfig = {
       useClass: HttpErrorInterceptor,
       multi: true,
     },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: LoaderInterceptor,
+      multi: true
+    }
   ],
 };
