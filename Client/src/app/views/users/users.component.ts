@@ -14,6 +14,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-users',
@@ -44,7 +45,7 @@ export class UsersComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
   @ViewChild(MatSort) sort: MatSort | null = null;
 
-  constructor(private service: UserService, private destroyRef: DestroyRef, private snackBar: MatSnackBar) {}
+  constructor(private service: UserService, private destroyRef: DestroyRef, private snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
     this.service
@@ -67,11 +68,16 @@ export class UsersComponent implements OnInit {
   }
 
   change(row: User): void {
-    const id = <string> row.id;
-    row.auth = !row.auth;
-    this.service.updateUserField(id, row).pipe(
+    const id = <string>row.id;
+    this.service.updateUserField(id, { ...row, auth: !row.auth }).pipe(
+      switchMap(() => {
+        return this.service.getUsers();
+      }),
       takeUntilDestroyed(this.destroyRef)
-    ).subscribe(() => {
+    ).subscribe((users) => {
+      this.dataSource = new MatTableDataSource(users);
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
       this.snackBar.open('User updated successfully', 'Close', { duration: 2000 });
     });
   }

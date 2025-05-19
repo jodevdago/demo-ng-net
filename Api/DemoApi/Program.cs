@@ -114,6 +114,15 @@ builder.Services.AddAuthorization(options =>
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var context = services.GetRequiredService<AppDbContext>();
+    var passwordService = services.GetRequiredService<PasswordService>();
+
+    DbInitializer.Initialize(context, passwordService);
+}
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

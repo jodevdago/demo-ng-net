@@ -27,7 +27,7 @@ export class AppComponent {
   ngOnInit() {
     this.loaderService.loading$.subscribe(value => {
       this.loading = value;
-      this.cdRef.detectChanges(); // force Angular à mettre à jour proprement
+      this.cdRef.detectChanges();
     });
   }
 }
