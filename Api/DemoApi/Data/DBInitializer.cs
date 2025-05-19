@@ -265,7 +265,7 @@ namespace DemoApi.Data
 						Id = Guid.NewGuid(),
 						Title = "Erreur de typographie",
 						Desc = "Un mot est mal orthographié sur la page d’accueil.",
-						Priority = 3,
+						Priority = 2,
 						Status = TicketStatus.PENDING,
 						AssignedId = john.Id
 					},
@@ -274,7 +274,7 @@ namespace DemoApi.Data
 						Id = Guid.NewGuid(),
 						Title = "Lien vers les CGU obsolète",
 						Desc = "Le lien redirige vers une ancienne version.",
-						Priority = 3,
+						Priority = 1,
 						Status = TicketStatus.CLOSED,
 						AssignedId = john.Id
 					},
@@ -283,7 +283,7 @@ namespace DemoApi.Data
 						Id = Guid.NewGuid(),
 						Title = "Photo de profil non centrée",
 						Desc = "La photo est décalée à gauche dans la section utilisateur.",
-						Priority = 3,
+						Priority = 0,
 						Status = TicketStatus.PENDING,
 						AssignedId = john.Id
 					},
@@ -292,7 +292,7 @@ namespace DemoApi.Data
 						Id = Guid.NewGuid(),
 						Title = "Bouton non aligné",
 						Desc = "Le bouton 'Valider' déborde sur mobile.",
-						Priority = 3,
+						Priority = 2,
 						Status = TicketStatus.PENDING,
 						AssignedId = john.Id
 					},
@@ -301,7 +301,7 @@ namespace DemoApi.Data
 						Id = Guid.NewGuid(),
 						Title = "Favicon manquant",
 						Desc = "L’icône du site n’apparaît pas dans l’onglet du navigateur.",
-						Priority = 3,
+						Priority = 2,
 						Status = TicketStatus.CLOSED,
 						AssignedId = john.Id
 					},
@@ -310,7 +310,7 @@ namespace DemoApi.Data
 						Id = Guid.NewGuid(),
 						Title = "Taille de police incohérente",
 						Desc = "La taille du texte change d’un paragraphe à l’autre.",
-						Priority = 3,
+						Priority = 2,
 						Status = TicketStatus.PENDING,
 						AssignedId = john.Id
 					},
@@ -319,7 +319,7 @@ namespace DemoApi.Data
 						Id = Guid.NewGuid(),
 						Title = "Marge trop grande dans les cartes",
 						Desc = "Les cartes d’information ont trop d’espace en bas.",
-						Priority = 3,
+						Priority = 0,
 						Status = TicketStatus.PENDING,
 						AssignedId = john.Id
 					}
