@@ -1,6 +1,6 @@
 # 💪 Angular + .NET Ticket Management Demo App
 
-This is a **demo application** built with **Angular v<your-angular-version>** and **.NET <your-dotnet-version>**, designed to showcase core full-stack development skills such as **authentication**, **ticket management**, and **user management**.
+This is a **demo application** built with **Angular v18** and **.NET 8.8**, designed to showcase core full-stack development skills such as **authentication**, **ticket management**, and **user management**.
 
 ⚠️ **Note**: This is not a production-ready application. It is intended **solely for demonstration purposes** and to **measure development capabilities** in both frontend and backend technologies.
 
