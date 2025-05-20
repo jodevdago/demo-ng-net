@@ -93,6 +93,11 @@ This is a **demo application** built with **Angular v<your-angular-version>** an
    ```
    http://localhost:5027
    ```
+4. You can use also Swagger at:
+
+   ```
+   http://localhost:5027/swagger
+   ```
 
 ---
 
