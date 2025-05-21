@@ -1,3 +1,6 @@
+networks:
+  demotestapp:
+
 services:
   angular:
     build:
@@ -7,7 +10,9 @@ services:
       - ./Client:/app
       - /app/node_modules
     ports:
-      - "4200:4200"
+      - 4200:4200
+    depends_on:
+      - dotnet
     environment:
       - CHOKIDAR_USEPOLLING=true
 
@@ -16,24 +21,29 @@ services:
       context: ./Api/DemoApi
       dockerfile: Dockerfile
     ports:
-      - "5027:5027"
+      - 8001:80
     volumes:
       - ./Api/DemoApi:/src
-    command: dotnet watch run --urls http://0.0.0.0:5027
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Docker
     depends_on:
       - sqlserver
+    environment:
+      - DB_HOST=sqlserver
+      - DB_NAME=DemoApiDb
+      - DB_SA_PASSWORD=password@12345#
+    networks: 
+      - demotestapp
 
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
     environment:
-      SA_PASSWORD: "YourStrong!Passw0rd"  # à changer avec un mot de passe fort
-      ACCEPT_EULA: "Y"
+      - SA_PASSWORD=password@12345#
+      - ACCEPT_EULA=Y
     ports:
-      - "1433:1433"
+      - 8002:1433
     volumes:
       - sqlserverdata:/var/opt/mssql
+    networks: 
+      - demotestapp
 
 volumes:
   sqlserverdata:

@@ -67,7 +67,7 @@ namespace DemoApi.Data
 				var evan = context.Users.FirstOrDefault(u => u.Email == "evan@example.com");
 				var john = context.Users.FirstOrDefault(u => u.Email == "john@example.com");
 
-				if (jonathan == null || tommy == null || evan == null)
+				if (jonathan == null || tommy == null || evan == null || john == null)
 					return;
 
 				context.Tickets.AddRange(
