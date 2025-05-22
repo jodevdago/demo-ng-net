@@ -47,7 +47,7 @@ This is a **demo application** built with **Angular v18** and **.NET 8.8**, desi
 3. Start the development server:
 
    ```bash
-   ng serve
+   npm run start:local
    ```
 
 4. Visit the app in your browser:
@@ -110,14 +110,6 @@ This is a **demo application** built with **Angular v18** and **.NET 8.8**, desi
    ```
 
 2. The Angular frontend and .NET backend will be launched together.
-
----
-
-### ⚠️ Docker Troubleshooting
-
-> **Current issue**:
-> During Docker build, there is a known problem where the `npm install` step may fail due to network or caching issues.
-> This is actively being investigated and will be fixed in future updates.
 
 ---
 
