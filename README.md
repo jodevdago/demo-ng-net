@@ -101,7 +101,7 @@ This is a **demo application** built with **Angular v18** and **.NET 8.8**, desi
 
 ---
 
-## 🐳 Run the Full App with Docker
+## 🐳 Run the Full App with Docker (dev mode)
 
 1. In the root project directory, run:
 
