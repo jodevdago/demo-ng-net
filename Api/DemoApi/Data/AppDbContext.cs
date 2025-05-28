@@ -14,7 +14,16 @@ namespace DemoApi.Data
         {
             modelBuilder.Entity<User>()
                 .HasIndex(u => u.Email)
-                .IsUnique(); // Ensure email is unique
+                .IsUnique();
+
+            modelBuilder.Entity<Ticket>(entity =>
+            {
+                entity.Property(e => e.Title)
+                    .IsUnicode(true);    
+
+                entity.Property(e => e.Desc)
+                    .IsUnicode(true);
+            });
 
             base.OnModelCreating(modelBuilder);
         }

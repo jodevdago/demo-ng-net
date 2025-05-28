@@ -75,7 +75,7 @@ namespace DemoApi.Data
 					{
 						Id = Guid.NewGuid(),
 						Title = "Panne serveur principal",
-						Desc = "Le serveur de production ne rÈpond plus depuis 8h ce matin.",
+						Desc = "Le serveur de production ne r√©pond plus depuis 8h ce matin.",
 						Priority = 1,
 						Status = TicketStatus.PENDING,
 						AssignedId = jonathan.Id
@@ -93,7 +93,7 @@ namespace DemoApi.Data
 					{
 						Id = Guid.NewGuid(),
 						Title = "Service de paiement instable",
-						Desc = "Le paiement Èchoue alÈatoirement pour certains clients.",
+						Desc = "Le paiement √©choue al√©atoirement pour certains clients.",
 						Priority = 1,
 						Status = TicketStatus.PENDING,
 						AssignedId = jonathan.Id
@@ -101,8 +101,8 @@ namespace DemoApi.Data
 					new Ticket
 					{
 						Id = Guid.NewGuid(),
-						Title = "Pic de latence dÈtectÈ",
-						Desc = "La latence des requÍtes dÈpasse les 3s pendant les heures de pointe.",
+						Title = "Pic de latence d√©tect√©",
+						Desc = "La latence des requ√®tes d√©passe les 3s pendant les heures de pointe.",
 						Priority = 1,
 						Status = TicketStatus.PENDING,
 						AssignedId = jonathan.Id
@@ -110,7 +110,7 @@ namespace DemoApi.Data
 					new Ticket
 					{
 						Id = Guid.NewGuid(),
-						Title = "Base de donnÈes en surcharge",
+						Title = "Base de donn√©es en surcharge",
 						Desc = "Augmentation anormale du CPU sur PostgreSQL.",
 						Priority = 1,
 						Status = TicketStatus.INPROGRESS,
@@ -128,8 +128,8 @@ namespace DemoApi.Data
 					new Ticket
 					{
 						Id = Guid.NewGuid(),
-						Title = "Faille de sÈcuritÈ dÈtectÈe",
-						Desc = "Une faille XSS a ÈtÈ dÈtectÈe sur le module des commentaires.",
+						Title = "Faille de s√©curit√© d√©tect√©e",
+						Desc = "Une faille XSS a √©t√© d√©tect√©e sur le module des commentaires.",
 						Priority = 1,
 						Status = TicketStatus.PENDING,
 						AssignedId = jonathan.Id
@@ -138,7 +138,7 @@ namespace DemoApi.Data
 					{
 						Id = Guid.NewGuid(),
 						Title = "API lente",
-						Desc = "Les rÈponses de líAPI mettent plus de 5s.",
+						Desc = "Les r√©ponses de l√©API mettent plus de 5s.",
 						Priority = 2,
 						Status = TicketStatus.PENDING,
 						AssignedId = tommy.Id
@@ -146,8 +146,8 @@ namespace DemoApi.Data
 					new Ticket
 					{
 						Id = Guid.NewGuid(),
-						Title = "Bug díaffichage sur mobile",
-						Desc = "Le tableau de bord ne síaffiche pas correctement sur iOS.",
+						Title = "Bug d√©affichage sur mobile",
+						Desc = "Le tableau de bord ne s√©affiche pas correctement sur iOS.",
 						Priority = 2,
 						Status = TicketStatus.INPROGRESS,
 						AssignedId = tommy.Id
@@ -155,8 +155,8 @@ namespace DemoApi.Data
 					new Ticket
 					{
 						Id = Guid.NewGuid(),
-						Title = "Champ obligatoire non dÈtectÈ",
-						Desc = "Le formulaire permet díenvoyer des donnÈes vides sans alerte.",
+						Title = "Champ obligatoire non d√©tect√©",
+						Desc = "Le formulaire permet d√©envoyer des donn√©es vides sans alerte.",
 						Priority = 2,
 						Status = TicketStatus.FINISHED,
 						AssignedId = tommy.Id
@@ -164,7 +164,7 @@ namespace DemoApi.Data
 					new Ticket
 					{
 						Id = Guid.NewGuid(),
-						Title = "IncohÈrence des donnÈes clients",
+						Title = "Incoh√©rence des donn√©es clients",
 						Desc = "Certains clients ont des informations contradictoires entre 2 modules.",
 						Priority = 2,
 						Status = TicketStatus.PENDING,
@@ -174,7 +174,7 @@ namespace DemoApi.Data
 					{
 						Id = Guid.NewGuid(),
 						Title = "Temps de chargement trop long",
-						Desc = "La page 'Rapports mensuels' met plus de 10s ‡ se charger.",
+						Desc = "La page 'Rapports mensuels' met plus de 10s √© se charger.",
 						Priority = 2,
 						Status = TicketStatus.PENDING,
 						AssignedId = tommy.Id
@@ -182,8 +182,8 @@ namespace DemoApi.Data
 					new Ticket
 					{
 						Id = Guid.NewGuid(),
-						Title = "Email de confirmation non reÁu",
-						Desc = "Les utilisateurs ne reÁoivent pas líemail aprËs líinscription.",
+						Title = "Email de confirmation non re√ßu",
+						Desc = "Les utilisateurs ne re√ßoivent pas l'email apr√©s l'inscription.",
 						Priority = 2,
 						Status = TicketStatus.FINISHED,
 						AssignedId = tommy.Id
@@ -191,8 +191,8 @@ namespace DemoApi.Data
 					new Ticket
 					{
 						Id = Guid.NewGuid(),
-						Title = "Recherche ne retourne aucun rÈsultat",
-						Desc = "MÍme avec des termes valides, la recherche reste vide.",
+						Title = "Recherche ne retourne aucun r√©sultat",
+						Desc = "M√©me avec des termes valides, la recherche reste vide.",
 						Priority = 2,
 						Status = TicketStatus.INPROGRESS,
 						AssignedId = tommy.Id
@@ -200,7 +200,7 @@ namespace DemoApi.Data
 					new Ticket
 					{
 						Id = Guid.NewGuid(),
-						Title = "Lien de tÈlÈchargement cassÈ",
+						Title = "Lien de t√©l√©chargement cass√©",
 						Desc = "Le lien vers le PDF ne fonctionne plus.",
 						Priority = 2,
 						Status = TicketStatus.PENDING,
@@ -210,7 +210,7 @@ namespace DemoApi.Data
 					{
 						Id = Guid.NewGuid(),
 						Title = "Erreur JavaScript dans la console",
-						Desc = "Une erreur apparaÓt dans la console sur la page díaccueil.",
+						Desc = "Une erreur apparait dans la console sur la page d'accueil.",
 						Priority = 2,
 						Status = TicketStatus.FINISHED,
 						AssignedId = evan.Id
@@ -219,7 +219,7 @@ namespace DemoApi.Data
 					{
 						Id = Guid.NewGuid(),
 						Title = "Traductions manquantes",
-						Desc = "Des ÈlÈments ne sont pas traduits en anglais dans le back-office.",
+						Desc = "Des √©l√©ments ne sont pas traduits en anglais dans le back-office.",
 						Priority = 2,
 						Status = TicketStatus.INPROGRESS,
 						AssignedId = evan.Id
@@ -227,7 +227,7 @@ namespace DemoApi.Data
 					new Ticket
 					{
 						Id = Guid.NewGuid(),
-						Title = "Bogue dans le filtre de recherche",
+						Title = "Bug dans le filtre de recherche",
 						Desc = "Filtrer par date ne fonctionne pas correctement.",
 						Priority = 2,
 						Status = TicketStatus.PENDING,
@@ -236,8 +236,8 @@ namespace DemoApi.Data
 					new Ticket
 					{
 						Id = Guid.NewGuid(),
-						Title = "Page blanche aprËs login",
-						Desc = "Une page blanche s'affiche juste aprËs la connexion.",
+						Title = "Page blanche apr√©s login",
+						Desc = "Une page blanche s'affiche juste apr√©s la connexion.",
 						Priority = 2,
 						Status = TicketStatus.PENDING,
 						AssignedId = evan.Id
@@ -254,7 +254,7 @@ namespace DemoApi.Data
 					new Ticket
 					{
 						Id = Guid.NewGuid(),
-						Title = "IcÙne manquante sur le bouton díenvoi",
+						Title = "Icone manquante sur le bouton d'envoi",
 						Desc = "Le bouton 'Envoyer' est vide dans le formulaire de contact.",
 						Priority = 2,
 						Status = TicketStatus.INPROGRESS,
@@ -264,7 +264,7 @@ namespace DemoApi.Data
 					{
 						Id = Guid.NewGuid(),
 						Title = "Erreur de typographie",
-						Desc = "Un mot est mal orthographiÈ sur la page díaccueil.",
+						Desc = "Un mot est mal orthographi√© sur la page d√©accueil.",
 						Priority = 2,
 						Status = TicketStatus.PENDING,
 						AssignedId = john.Id
@@ -272,7 +272,7 @@ namespace DemoApi.Data
 					new Ticket
 					{
 						Id = Guid.NewGuid(),
-						Title = "Lien vers les CGU obsolËte",
+						Title = "Lien vers les CGU obsol√©te",
 						Desc = "Le lien redirige vers une ancienne version.",
 						Priority = 1,
 						Status = TicketStatus.CLOSED,
@@ -281,8 +281,8 @@ namespace DemoApi.Data
 					new Ticket
 					{
 						Id = Guid.NewGuid(),
-						Title = "Photo de profil non centrÈe",
-						Desc = "La photo est dÈcalÈe ‡ gauche dans la section utilisateur.",
+						Title = "Photo de profil non centr√©e",
+						Desc = "La photo est d√©cal√©e √† gauche dans la section utilisateur.",
 						Priority = 0,
 						Status = TicketStatus.PENDING,
 						AssignedId = john.Id
@@ -290,8 +290,8 @@ namespace DemoApi.Data
 					new Ticket
 					{
 						Id = Guid.NewGuid(),
-						Title = "Bouton non alignÈ",
-						Desc = "Le bouton 'Valider' dÈborde sur mobile.",
+						Title = "Bouton non align√©",
+						Desc = "Le bouton 'Valider' d√©borde sur mobile.",
 						Priority = 2,
 						Status = TicketStatus.PENDING,
 						AssignedId = john.Id
@@ -300,7 +300,7 @@ namespace DemoApi.Data
 					{
 						Id = Guid.NewGuid(),
 						Title = "Favicon manquant",
-						Desc = "LíicÙne du site níapparaÓt pas dans líonglet du navigateur.",
+						Desc = "L'icone du site n'appara√©t pas dans l'onglet du navigateur.",
 						Priority = 2,
 						Status = TicketStatus.CLOSED,
 						AssignedId = john.Id
@@ -308,8 +308,8 @@ namespace DemoApi.Data
 					new Ticket
 					{
 						Id = Guid.NewGuid(),
-						Title = "Taille de police incohÈrente",
-						Desc = "La taille du texte change díun paragraphe ‡ líautre.",
+						Title = "Taille de police incoh√©rente",
+						Desc = "La taille du texte change d'un paragraphe √† l'autre.",
 						Priority = 2,
 						Status = TicketStatus.PENDING,
 						AssignedId = john.Id
@@ -318,7 +318,7 @@ namespace DemoApi.Data
 					{
 						Id = Guid.NewGuid(),
 						Title = "Marge trop grande dans les cartes",
-						Desc = "Les cartes díinformation ont trop díespace en bas.",
+						Desc = "Les cartes d'information ont trop d'espace en bas.",
 						Priority = 0,
 						Status = TicketStatus.PENDING,
 						AssignedId = john.Id
