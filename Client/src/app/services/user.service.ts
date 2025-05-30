@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { User } from '../types/user';
 
@@ -9,7 +9,6 @@ import { User } from '../types/user';
 })
 export class UserService {
   private readonly api = environment.apiUrl;
-  userConnected$ = new BehaviorSubject<any>({});
 
   constructor(private http: HttpClient) {}
 

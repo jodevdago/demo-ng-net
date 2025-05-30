@@ -1,6 +1,6 @@
 export interface User {
   email: string;
-  role: number;
+  role: string | number;
   auth: boolean;
   level: number;
   fullname: string;

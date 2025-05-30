@@ -3,9 +3,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterModule } from '@angular/router';
-import { UserService } from '../../services/user.service';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
+import { UserStore } from '../../store/user.store';
 
 @Component({
   selector: 'app-sidenav',
@@ -24,10 +24,10 @@ export class SidenavComponent {
   @Input() isExpanded = false;
   @Output() toggleMenu = new EventEmitter();
 
-  userService = inject(UserService);
   authService = inject(AuthService);
+  store = inject(UserStore);
 
-  user$ = this.userService.userConnected$;
+  user = this.store.userConnected;
 
   routeLinksAdmin = [
     { link: './tickets', name: 'Tickets', icon: 'view_agenda' },

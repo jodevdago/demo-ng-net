@@ -1,20 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { SidenavComponent } from './sidenav.component';
 import { AuthService } from '../../services/auth.service';
-import { UserService } from '../../services/user.service';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { of } from 'rxjs';
 import { RouterTestingModule } from '@angular/router/testing';
+import { UserStore } from '../../store/user.store';
 
 describe('SidenavComponent', () => {
   let component: SidenavComponent;
   let fixture: ComponentFixture<SidenavComponent>;
   let mockAuthService: any;
-  let mockUserService: any;
+  let mockUserSTore: any;
 
   beforeEach(async () => {
     // Mock the services
@@ -22,8 +21,8 @@ describe('SidenavComponent', () => {
       logout: jest.fn(),
     };
 
-    mockUserService = {
-      userConnected$: of({ name: 'Test User' }),
+    mockUserSTore = {
+      userConnected: jest.fn(() => ({ name: 'Test User' })),
     };
 
     await TestBed.configureTestingModule({
@@ -38,7 +37,7 @@ describe('SidenavComponent', () => {
       ],
       providers: [
         { provide: AuthService, useValue: mockAuthService },
-        { provide: UserService, useValue: mockUserService },
+        { provide: UserStore, useValue: mockUserSTore },
       ],
     }).compileComponents();
 
@@ -89,11 +88,9 @@ describe('SidenavComponent', () => {
     expect(component.routeLinks).toEqual(expectedLinks);
   });
 
-  // Test user$ subscription from UserService
-  it('should subscribe to user$ and get the user data', (done) => {
-    component.user$.subscribe((user) => {
-      expect(user).toEqual({ name: 'Test User' });
-      done();
-    });
+  // Test user from UserStore
+  it('should subscribe to user and get the user data', () => {
+    const user = component.user;
+    expect(user()).toEqual({ name: 'Test User' });
   });
 });

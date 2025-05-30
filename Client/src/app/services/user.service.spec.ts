@@ -63,10 +63,4 @@ describe('UserService', () => {
 
     expect(httpMock.get).toHaveBeenCalledWith(environment.apiUrl + '/user/profile');
   });
-
-  it('should have a default value for userConnected$', () => {
-    service.userConnected$.subscribe(value => {
-      expect(value).toEqual({});
-    });
-  });
 });

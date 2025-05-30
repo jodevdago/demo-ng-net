@@ -20,6 +20,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TicketDto } from '../../../types/ticketDto';
 import { TicketsStore } from '../../../store/ticket.store';
+import { UserStore } from '../../../store/user.store';
 
 @Component({
   selector: 'app-create-ticket',
@@ -45,7 +46,8 @@ export class CreateTicketComponent implements OnInit {
   users$: Observable<any[]> = of([]);
   form: FormGroup;
 
-  store = inject(TicketsStore);
+  ticketStore = inject(TicketsStore);
+  userStore = inject(UserStore);
 
   constructor(
     private fb: FormBuilder,
@@ -79,19 +81,16 @@ export class CreateTicketComponent implements OnInit {
       }),
     )
 
-    this.usersService.userConnected$.pipe(
-      takeUntilDestroyed(this.destroyRef)
-    ).subscribe(x => {
-      if (x.role == 'Admin') {
-        this.form.enable();
-      } else {
-        this.form.get('desc')?.disable();
-        this.form.get('priority')?.disable();
-        this.form.get('title')?.disable();
-        this.form.get('assigned')?.disable();
-        this.form.get('status')?.enable();
-      }
-    })
+    const userConnected = this.userStore.userConnected;
+    if (userConnected().role == 'Admin') {
+      this.form.enable();
+    } else {
+      this.form.get('desc')?.disable();
+      this.form.get('priority')?.disable();
+      this.form.get('title')?.disable();
+      this.form.get('assigned')?.disable();
+      this.form.get('status')?.enable();
+    }
   }
 
   displayFn(user: User): string {
@@ -107,7 +106,7 @@ export class CreateTicketComponent implements OnInit {
       assignedId: this.form.get('assigned')?.value.id,
     };
     if (this.data) {
-      this.store.updateTicket(this.data.id, formdata);
+      this.ticketStore.updateTicket(this.data.id, formdata);
       this.form.patchValue({
         desc: '',
         priority: 0,
@@ -116,7 +115,7 @@ export class CreateTicketComponent implements OnInit {
       });
       this.dialogRef.close();
     } else {
-      this.store.createTicket(formdata);
+      this.ticketStore.createTicket(formdata);
       this.form.patchValue({
         desc: '',
         priority: 0,

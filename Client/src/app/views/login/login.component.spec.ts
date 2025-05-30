@@ -75,7 +75,7 @@ describe('LoginComponent', () => {
       'test@example.com',
       'password123'
     );
-    expect(mockRouter.navigate).toHaveBeenCalledWith(['./layout']);
+    expect(mockRouter.navigate).toHaveBeenCalledWith(['./layout/tickets']);
   });
 
   it('should set error message on failed login', () => {

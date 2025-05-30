@@ -39,6 +39,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { InitialsPipe } from '../../pipes/initials.pipe';
 import { TicketDto } from '../../types/ticketDto';
 import { TicketsStore } from '../../store/ticket.store';
+import { UserStore } from '../../store/user.store';
 
 @Component({
   selector: 'app-tickets',
@@ -82,7 +83,8 @@ import { TicketsStore } from '../../store/ticket.store';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TicketsComponent implements OnInit {
-  private store = inject(TicketsStore);
+  private ticketStore = inject(TicketsStore);
+  private userStore = inject(UserStore);
 
   columnsToDisplay: string[] = [
     'id',
@@ -99,7 +101,7 @@ export class TicketsComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
   @ViewChild(MatSort) sort: MatSort | null = null;
 
-  tickets = this.store.tickets;
+  tickets = this.ticketStore.tickets;
   pending = computed(() => this.tickets().filter(t => t.status === 'PENDING'));
   inProgress = computed(() => this.tickets().filter(t => t.status === 'INPROGRESS'));
   finished = computed(() => this.tickets().filter(t => t.status === 'FINISHED'));
@@ -107,7 +109,7 @@ export class TicketsComponent implements OnInit {
 
   displayTable = true;
   isAdmin = false;
-  user$;
+  user = this.userStore.userConnected;
   usersList$;
 
   assignedTo = new FormControl<string[]>([]);
@@ -117,7 +119,6 @@ export class TicketsComponent implements OnInit {
     private userService: UserService,
     private destroyRef: DestroyRef,
   ) {
-    this.user$ = this.userService.userConnected$;
     this.usersList$ = this.userService.getUsers();
 
     effect(() => {
@@ -132,16 +133,13 @@ export class TicketsComponent implements OnInit {
     this.assignedTo.valueChanges.pipe(
       takeUntilDestroyed(this.destroyRef)
     ).subscribe((userIds) => {
-      this.store.loadTicketsByUserIds(userIds || []);
+      this.ticketStore.loadTicketsByUserIds(userIds || []);
     });
 
-    this.userService.userConnected$.pipe(
-      takeUntilDestroyed(this.destroyRef)
-    ).subscribe((user) => {
-      if (user.id) {
-        this.assignedTo.setValue([user.id])
-      }
-    });
+    const user = this.user();
+    if (user.id) {
+      this.assignedTo.setValue([user.id])
+    }
   }
 
   applyFilter(event: Event): void {
@@ -162,7 +160,7 @@ export class TicketsComponent implements OnInit {
   }
 
   onDeleteTicket(id: string): void {
-    this.store.deleteTicket(id);
+    this.ticketStore.deleteTicket(id);
   }
 
   drop(event: CdkDragDrop<Ticket[]>): void {
@@ -180,7 +178,7 @@ export class TicketsComponent implements OnInit {
         event.previousIndex,
         event.currentIndex
       );
-      // 🔥 Update Firestore
+      // 🔥 Update FireStore
       const ticketId = ticket.id ? ticket.id : null;
       if (ticketId) {
         const ticketDto: TicketDto = {
@@ -190,7 +188,7 @@ export class TicketsComponent implements OnInit {
           status: ticket.status,
           assignedId: ticket.assigned.id || '',
         }
-        this.store.updateTicket(ticketId, ticketDto);
+        this.ticketStore.updateTicket(ticketId, ticketDto);
       }
     }
   }
