@@ -30,13 +30,4 @@ export const AuthGuard = () => {
       return of(false);
     })
   )
-
-  const user = store.userConnected;
-  console.log('[user]: ', user());
-  if (user().auth) {
-    return of(true);
-  }
-  console.log('[user] auth false');
-  router.navigate(['/unauthorized']);
-  return of(false);
 };
