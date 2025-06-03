@@ -15,6 +15,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { switchMap } from 'rxjs';
+import { LevelPipe } from '../../pipes/level.pipe';
 
 @Component({
   selector: 'app-users',
@@ -28,6 +29,7 @@ import { switchMap } from 'rxjs';
     MatPaginatorModule,
     MatSlideToggleModule,
     MatButtonModule,
+    LevelPipe,
   ],
   templateUrl: './users.component.html',
   styleUrl: './users.component.scss',

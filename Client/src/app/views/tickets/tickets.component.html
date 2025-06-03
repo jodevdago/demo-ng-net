@@ -20,16 +20,16 @@
   </mat-button-toggle-group>
   <div>
     <button class="btn-level-stat pending" mat-raised-button>
-      Pending: {{ this.pending().length / this.tickets().length || 0 | percent }}
+      Pending: {{ this.pending().length / this.tickets().length || 0 | percent : '0.1' | toZero }}
     </button>
     <button class="btn-level-stat inprogress" mat-raised-button>
-      In progress: {{ this.inProgress().length / this.tickets().length || 0 | percent }}
+      In progress: {{ this.inProgress().length / this.tickets().length || 0 | percent : '0.1' | toZero }}
     </button>
     <button class="btn-level-stat finished" mat-raised-button>
-      Finished: {{ this.finished().length / this.tickets().length || 0 | percent }}
+      Finished: {{ this.finished().length / this.tickets().length || 0 | percent : '0.1' | toZero }}
     </button>
     <button class="btn-level-stat closed" mat-raised-button>
-      Closed: {{ this.closed().length / this.tickets().length || 0 | percent }}
+      Closed: {{ this.closed().length / this.tickets().length || 0 | percent : '0.1' | toZero }}
     </button>
   </div>
   <mat-form-field class="mt-[10px]">
@@ -54,7 +54,7 @@
       <td mat-cell *matCellDef="let element">
         {{ element[column].fullname }}
         <button class="ms-5 btn-level" mat-raised-button>
-          {{ element[column].level }}
+          {{ element[column].level | level }}
         </button>
       </td>
       }@else if (column == 'status') {

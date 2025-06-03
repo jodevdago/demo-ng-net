@@ -13,8 +13,8 @@ export class TicketsService {
 
   constructor(private http: HttpClient) {}
 
-  getTickets(): Observable<any[]> {
-    return this.http.get<any[]>(this.api + '/ticket');
+  getTickets(): Observable<Ticket[]> {
+    return this.http.get<Ticket[]>(this.api + '/ticket');
   }
 
   createTicket(data: TicketDto): Observable<TicketDto> {

@@ -40,6 +40,8 @@ import { InitialsPipe } from '../../pipes/initials.pipe';
 import { TicketDto } from '../../types/ticketDto';
 import { TicketsStore } from '../../store/ticket.store';
 import { UserStore } from '../../store/user.store';
+import { ToZeroPipe } from '../../pipes/to-zero.pipe';
+import { LevelPipe } from '../../pipes/level.pipe';
 
 @Component({
   selector: 'app-tickets',
@@ -60,7 +62,9 @@ import { UserStore } from '../../store/user.store';
     MatSelectModule,
     ReactiveFormsModule,
     MatGridListModule,
-    InitialsPipe
+    InitialsPipe,
+    ToZeroPipe,
+    LevelPipe,
   ],
   templateUrl: './tickets.component.html',
   styleUrl: './tickets.component.scss',
@@ -94,7 +98,7 @@ export class TicketsComponent implements OnInit {
     'createdOn',
     'status'
   ];
-  dataSource!: MatTableDataSource<any>;
+  dataSource!: MatTableDataSource<Ticket>;
   columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand'];
   expandedElement: Ticket | null = null;
 
@@ -108,7 +112,6 @@ export class TicketsComponent implements OnInit {
   closed = computed(() => this.tickets().filter(t => t.status === 'CLOSED'));
 
   displayTable = true;
-  isAdmin = false;
   user = this.userStore.userConnected;
   usersList$;
 
