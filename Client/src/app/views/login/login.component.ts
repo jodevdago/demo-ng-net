@@ -21,12 +21,12 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { AuthService } from '../../services/auth.service';
 import { timer } from 'rxjs';
 import { Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { StorageService } from '../../services/storage.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { AuthService } from '@services/auth.service';
+import { StorageService } from '@services/storage.service';
 
 @Component({
   selector: 'app-login',

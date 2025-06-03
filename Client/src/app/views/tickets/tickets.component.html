@@ -59,22 +59,22 @@
       </td>
       }@else if (column == 'status') {
       <td mat-cell *matCellDef="let element">
-        @if (element[column] == 'PENDING') {
+        @if (element[column] == TICKETSTATUS.PENDING) {
         <button class="btn-level pending" mat-raised-button>
           Pending
         </button>
         }
-        @if (element[column] == 'INPROGRESS') {
+        @if (element[column] == TICKETSTATUS.INPROGRESS) {
         <button class="btn-level inprogress" mat-raised-button>
           In progress
         </button>
         }
-        @if (element[column] == 'FINISHED') {
+        @if (element[column] == TICKETSTATUS.FINISHED) {
         <button class="btn-level finished" mat-raised-button>
           Finished
         </button>
         }
-        @if (element[column] == 'CLOSED') {
+        @if (element[column] == TICKETSTATUS.CLOSED) {
         <button class="btn-level closed" mat-raised-button>
           Closed
         </button>

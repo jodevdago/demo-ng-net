@@ -1,6 +1,6 @@
-<form [formGroup]="form" (ngSubmit)="create()">
+<form [formGroup]="form" (ngSubmit)="createOrUpdate()">
   <div class="p-6">
-    <h6>Create a ticket</h6>
+    <h6>@if (data) { Edit } @else { Create } a ticket</h6>
     <mat-form-field
       appearance="outline"
       floatLabel="always"
@@ -41,10 +41,10 @@
       <mat-form-field appearance="outline" floatLabel="always">
         <mat-label>Status</mat-label>
         <mat-select formControlName="status">
-          <mat-option value="PENDING">Pending</mat-option>
-          <mat-option value="INPROGRESS">In progress</mat-option>
-          <mat-option value="FINISHED">Finished</mat-option>
-          <mat-option value="CLOSED">Closed</mat-option>
+          <mat-option [value]="TICKETSTATUS.PENDING">Pending</mat-option>
+          <mat-option [value]="TICKETSTATUS.INPROGRESS">In progress</mat-option>
+          <mat-option [value]="TICKETSTATUS.FINISHED">Finished</mat-option>
+          <mat-option [value]="TICKETSTATUS.CLOSED">Closed</mat-option>
         </mat-select>
       </mat-form-field>
     </div>

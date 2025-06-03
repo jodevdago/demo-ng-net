@@ -1,4 +1,6 @@
-import { User } from "./user";
+import { TicketStatus } from "@enums/ticket-status.enum";
+import { User } from "./user.type";
+
 
 export interface Ticket {
   desc: string;
@@ -7,5 +9,5 @@ export interface Ticket {
   createdOn: Date | any;
   assigned: User;
   id?: string;
-  status: 'INPROGRESS' | 'PENDING' | 'FINISHED' | 'CLOSED';
+  status: TicketStatus;
 }

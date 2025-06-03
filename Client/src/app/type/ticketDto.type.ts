@@ -1,7 +1,9 @@
+import { TicketStatus } from "@enums/ticket-status.enum";
+
 export interface TicketDto {
     title: string;
     desc: string;
     priority: number;
-    status: "PENDING" | "INPROGRESS" | "FINISHED" | "CLOSED",
+    status: TicketStatus,
     assignedId: string;
 }

@@ -1,4 +1,3 @@
-import { UserService } from './../../../services/user.service';
 import { ChangeDetectionStrategy, Component, DestroyRef, inject, Inject, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
@@ -8,7 +7,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { CommonModule } from '@angular/common';
-import { User } from '../../../types/user';
 import {
   FormBuilder,
   FormGroup,
@@ -18,9 +16,12 @@ import {
 import { map, Observable, of, startWith } from 'rxjs';
 import { MatDividerModule } from '@angular/material/divider';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { TicketDto } from '../../../types/ticketDto';
-import { TicketsStore } from '../../../store/ticket.store';
-import { UserStore } from '../../../store/user.store';
+import { TicketsStore } from '@store/ticket.store';
+import { UserStore } from '@store/user.store';
+import { UserService } from '@services/user.service';
+import { TicketStatus } from '@enums/ticket-status.enum';
+import { User } from '@type/user.type';
+import { TicketDto } from '@type/ticketDto.type';
 
 @Component({
   selector: 'app-create-ticket',
@@ -49,6 +50,8 @@ export class CreateTicketComponent implements OnInit {
   ticketStore = inject(TicketsStore);
   userStore = inject(UserStore);
 
+  readonly TICKETSTATUS = TicketStatus;
+
   constructor(
     private fb: FormBuilder,
     private usersService: UserService,
@@ -61,7 +64,7 @@ export class CreateTicketComponent implements OnInit {
       priority: [data?.priority || 0, Validators.required],
       title: [data?.title || '', Validators.required],
       assigned: [data?.assigned || {}, Validators.required],
-      status: [data?.status || 'PENDING', Validators.required],
+      status: [data?.status || TicketStatus.PENDING, Validators.required],
     });
 
     this.usersService.getUsers().pipe(
@@ -97,7 +100,7 @@ export class CreateTicketComponent implements OnInit {
     return user && user.fullname ? user.fullname : '';
   }
 
-  create(): void {
+  createOrUpdate(): void {
     const formdata: TicketDto = {
       title: this.form.get('title')?.value,
       desc: this.form.get('desc')?.value,

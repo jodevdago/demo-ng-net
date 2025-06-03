@@ -1,6 +1,6 @@
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
-import { User } from '../types/user';
+import { User } from '../type/user.type';
 import { inject, DestroyRef } from '@angular/core';
 import { UserService } from '../services/user.service';
 import { map, Observable, tap } from 'rxjs';

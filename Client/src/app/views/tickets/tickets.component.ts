@@ -15,7 +15,6 @@ import {
 } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { Ticket } from '../../types/ticket';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
@@ -36,12 +35,14 @@ import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { InitialsPipe } from '../../pipes/initials.pipe';
-import { TicketDto } from '../../types/ticketDto';
-import { TicketsStore } from '../../store/ticket.store';
-import { UserStore } from '../../store/user.store';
-import { ToZeroPipe } from '../../pipes/to-zero.pipe';
-import { LevelPipe } from '../../pipes/level.pipe';
+import { InitialsPipe } from '@pipes/initials.pipe';
+import { ToZeroPipe } from '@pipes/to-zero.pipe';
+import { LevelPipe } from '@pipes/level.pipe';
+import { TicketsStore } from '@store/ticket.store';
+import { UserStore } from '@store/user.store';
+import { TicketStatus } from '@enums/ticket-status.enum';
+import { Ticket } from '@type/ticket.type';
+import { TicketDto } from '@type/ticketDto.type';
 
 @Component({
   selector: 'app-tickets',
@@ -105,11 +106,13 @@ export class TicketsComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
   @ViewChild(MatSort) sort: MatSort | null = null;
 
+  readonly TICKETSTATUS = TicketStatus;
+
   tickets = this.ticketStore.tickets;
-  pending = computed(() => this.tickets().filter(t => t.status === 'PENDING'));
-  inProgress = computed(() => this.tickets().filter(t => t.status === 'INPROGRESS'));
-  finished = computed(() => this.tickets().filter(t => t.status === 'FINISHED'));
-  closed = computed(() => this.tickets().filter(t => t.status === 'CLOSED'));
+  pending = computed(() => this.tickets().filter(t => t.status === TicketStatus.PENDING));
+  inProgress = computed(() => this.tickets().filter(t => t.status === TicketStatus.INPROGRESS));
+  finished = computed(() => this.tickets().filter(t => t.status === TicketStatus.FINISHED));
+  closed = computed(() => this.tickets().filter(t => t.status === TicketStatus.CLOSED));
 
   displayTable = true;
   user = this.userStore.userConnected;

@@ -8,14 +8,14 @@ import { MatInputModule } from '@angular/material/input';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { UserService } from '../../services/user.service';
-import { User } from '../../types/user';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { switchMap } from 'rxjs';
-import { LevelPipe } from '../../pipes/level.pipe';
+import { LevelPipe } from '@pipes/level.pipe';
+import { UserService } from '@services/user.service';
+import { User } from '@type/user.type';
 
 @Component({
   selector: 'app-users',
