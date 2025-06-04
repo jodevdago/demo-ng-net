@@ -106,7 +106,12 @@ This is a **demo application** built with **Angular v18** and **.NET 8.8**, desi
 1. In the root project directory, run:
 
    ```bash
-   docker compose up --build
+   make build
+   ```
+   and after 
+   
+   ```bash
+   make up
    ```
 
 2. The Angular frontend and .NET backend will be launched together.
