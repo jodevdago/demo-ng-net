@@ -1,9 +1,9 @@
+import { UserService } from '@services/user.service';
 import { TestBed } from '@angular/core/testing';
 import { HttpClient } from '@angular/common/http';
-import { UserService } from './user.service';
 import { environment } from '../../environments/environment';
 import { of } from 'rxjs';
-import { User } from '../types/user';
+import { User } from '@type/user.type';
 
 describe('UserService', () => {
   let service: UserService;

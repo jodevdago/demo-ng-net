@@ -1,8 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { TicketsService } from './tickets.service';
 import { environment } from '../../environments/environment';
-import { TicketDto } from '../types/ticketDto';
+import { TicketsService } from './tickets.service';
+import { TicketDto } from '@type/ticketDto.type';
+import { TicketStatus } from '@enums/ticket-status.enum';
 
 describe('TicketsService', () => {
   let service: TicketsService;
@@ -36,8 +37,8 @@ describe('TicketsService', () => {
   });
 
   it('should create a ticket', () => {
-    const newTicket: TicketDto = { title: 'Updated', desc: 'Updated desc', assignedId: 'user2', priority: 0, status: 'PENDING' };
-    
+    const newTicket: TicketDto = { title: 'Updated', desc: 'Updated desc', assignedId: 'user2', priority: 0, status: TicketStatus.PENDING };
+
     service.createTicket(newTicket).subscribe(result => {
       expect(result).toEqual(newTicket);
     });
@@ -62,7 +63,7 @@ describe('TicketsService', () => {
 
   it('should update a ticket', () => {
     const id = '123';
-    const updateData: TicketDto = { title: 'Updated', desc: 'Updated desc', assignedId: 'user2', priority: 0, status: 'PENDING' };
+    const updateData: TicketDto = { title: 'Updated', desc: 'Updated desc', assignedId: 'user2', priority: 0, status: TicketStatus.PENDING };
 
     service.updateTicket(id, updateData).subscribe(result => {
       expect(result).toBeUndefined();

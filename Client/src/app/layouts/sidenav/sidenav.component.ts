@@ -4,8 +4,8 @@ import { MatListModule } from '@angular/material/list';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { AuthService } from '../../services/auth.service';
-import { UserStore } from '../../store/user.store';
+import { AuthService } from '@services/auth.service';
+import { UserStore } from '@store/user.store';
 
 @Component({
   selector: 'app-sidenav',

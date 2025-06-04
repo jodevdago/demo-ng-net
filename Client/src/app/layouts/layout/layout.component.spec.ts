@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { LayoutComponent } from './layout.component';
-import { AuthService } from '../../services/auth.service';
 import { of } from 'rxjs';
+import { AuthService } from '@services/auth.service';
 
 describe('LayoutComponent', () => {
   let component: LayoutComponent;

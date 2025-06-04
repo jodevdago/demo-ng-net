@@ -1,12 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CreateTicketComponent } from './create-ticket.component';
-import { UserService } from './../../../services/user.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { of } from 'rxjs';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { UserStore } from '../../../store/user.store';
-import { TicketsStore } from '../../../store/ticket.store';
+import { UserService } from '@services/user.service';
+import { TicketsStore } from '@store/ticket.store';
+import { UserStore } from '@store/user.store';
 
 describe('CreateTicketComponent', () => {
   let component: CreateTicketComponent;
@@ -76,7 +76,7 @@ describe('CreateTicketComponent', () => {
       assigned: { id: '1', fullname: 'John Doe' }
     });
 
-    component.create();
+    component.createOrUpdate();
 
     expect(mockTicketStore.createTicket).toHaveBeenCalledWith({
       title: 'New Ticket',
@@ -108,7 +108,7 @@ describe('CreateTicketComponent', () => {
       assigned: { id: '2', fullname: 'Jane Smith' }
     });
 
-    component.create();
+    component.createOrUpdate();
 
     expect(mockTicketStore.updateTicket).toHaveBeenCalledWith('ticket123', {
       title: 'Updated Title',

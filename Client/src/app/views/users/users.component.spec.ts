@@ -1,10 +1,10 @@
+import { User } from '@type/user.type';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { UsersComponent } from './users.component';
-import { UserService } from '../../services/user.service';
 import { of } from 'rxjs';
 import { MatPaginator } from '@angular/material/paginator';
-import { User } from '../../types/user';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { UserService } from '@services/user.service';
 
 class MockUserService {
   getUsers = jest.fn().mockReturnValue(of([{ id: '1', email: 'test@example.com', fullname: 'Test User', level: 1, role: 'User', auth: false }]));

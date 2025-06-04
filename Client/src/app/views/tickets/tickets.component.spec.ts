@@ -1,14 +1,14 @@
+import { Ticket } from '@type/ticket.type';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { signal } from '@angular/core';
 import { TicketsComponent } from './tickets.component';
-import { TicketsStore } from '../../store/ticket.store';
-import { UserStore } from '../../store/user.store';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
-import { Ticket } from '../../types/ticket';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { of } from 'rxjs';
+import { TicketsStore } from '@store/ticket.store';
+import { UserStore } from '@store/user.store';
 
 describe('TicketsComponent', () => {
   let component: TicketsComponent;
@@ -63,7 +63,7 @@ describe('TicketsComponent', () => {
     component.dataSource = new MatTableDataSource([
       { id: '1', title: 'Test Ticket' },
       { id: '2', title: 'Another Ticket' },
-    ]);
+    ] as any);
 
     component.applyFilter(mockEvent);
 
