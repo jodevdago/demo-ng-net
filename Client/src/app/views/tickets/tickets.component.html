@@ -42,8 +42,7 @@
   </mat-form-field>
 </div>
 
-@if (displayTable) {
-<div class="mt-[20px]">
+<div [class.hidden]="!displayTable" class="mt-[20px]">
   <table mat-table [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z8" matSort>
     @for (column of columnsToDisplay; track column) {
     <ng-container matColumnDef="{{ column }}">
@@ -153,7 +152,6 @@
 
   <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
 </div>
-}
 
 @if (!displayTable) {
 <div cdkDropListGroup class="board mt-[20px]">
