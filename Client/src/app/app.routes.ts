@@ -9,17 +9,15 @@ export const routes: Routes = [
   {
     path: '',
     component: LoginComponent,
-    title: 'Support IT'
   },
   {
     path: 'login',
     component: LoginComponent,
-    title: 'Support IT'
   },
   {
     path: 'unauthorized',
     component: UnauthorizedComponent,
-    title: 'Support IT | unauthorized'
+    title: 'Unauthorized'
   },
   {
     path: 'layout',
@@ -29,18 +27,18 @@ export const routes: Routes = [
       {
         path: '',
         loadComponent: () => import('./views/tickets/tickets.component').then(m => m.TicketsComponent),
-        title: 'Support IT | Tickets',
+        title: 'Tickets',
       },
       {
         path: 'tickets',
         loadComponent: () => import('./views/tickets/tickets.component').then(m => m.TicketsComponent),
-        title: 'Support IT | Tickets',
+        title: 'Tickets',
       },
       {
         path: 'users',
         loadComponent: () => import('./views/users/users.component').then(m => m.UsersComponent),
         canActivate: [userGuard],
-        title: 'Support IT | Users',
+        title: 'Users',
       },
     ]
   },
