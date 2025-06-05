@@ -11,9 +11,9 @@ export class CustomTitleStrategy extends TitleStrategy {
   override updateTitle(snapshot: RouterStateSnapshot): void {
     const title = this.buildTitle(snapshot);
     if (title !== undefined) {
-      this.title.setTitle(`Support IT | ${title}`);
+      this.title.setTitle(`IT Support | ${title}`);
     } else {
-      this.title.setTitle(`Support IT`);
+      this.title.setTitle(`IT Support`);
     }
   }
 }
