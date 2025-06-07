@@ -18,7 +18,7 @@ export const routes: Routes = [
   {
     path: 'unauthorized',
     component: UnauthorizedComponent,
-    title: 'Unauthorized'
+    title: 'Error 401'
   },
   {
     path: 'server-error',
