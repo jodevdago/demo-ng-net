@@ -1,8 +1,5 @@
 import { Component, DestroyRef, OnInit, ViewChild } from '@angular/core';
-import {
-  MAT_FORM_FIELD_DEFAULT_OPTIONS,
-  MatFormFieldModule,
-} from '@angular/material/form-field';
+import { MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
@@ -47,7 +44,11 @@ export class UsersComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
   @ViewChild(MatSort) sort: MatSort | null = null;
 
-  constructor(private service: UserService, private destroyRef: DestroyRef, private snackBar: MatSnackBar) { }
+  constructor(
+    private service: UserService,
+    private destroyRef: DestroyRef,
+    private snackBar: MatSnackBar,
+  ) {}
 
   ngOnInit(): void {
     this.service
@@ -71,16 +72,19 @@ export class UsersComponent implements OnInit {
 
   change(row: User): void {
     const id = <string>row.id;
-    this.service.updateUserField(id, { ...row, auth: !row.auth }).pipe(
-      switchMap(() => {
-        return this.service.getUsers();
-      }),
-      takeUntilDestroyed(this.destroyRef)
-    ).subscribe((users) => {
-      this.dataSource = new MatTableDataSource(users);
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
-      this.snackBar.open('User updated successfully', 'Close', { duration: 2000 });
-    });
+    this.service
+      .updateUserField(id, { ...row, auth: !row.auth })
+      .pipe(
+        switchMap(() => {
+          return this.service.getUsers();
+        }),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe((users) => {
+        this.dataSource = new MatTableDataSource(users);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+        this.snackBar.open('User updated successfully', 'Close', { duration: 2000 });
+      });
   }
 }

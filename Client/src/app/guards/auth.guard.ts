@@ -28,6 +28,6 @@ export const AuthGuard = () => {
     catchError(() => {
       router.navigate(['/unauthorized']);
       return of(false);
-    })
-  )
+    }),
+  );
 };

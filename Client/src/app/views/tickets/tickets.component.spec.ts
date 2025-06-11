@@ -26,11 +26,11 @@ describe('TicketsComponent', () => {
       ]),
       deleteTicket: jest.fn(),
       loadTicketsByUserIds: jest.fn(),
-      updateTicket: jest.fn()
+      updateTicket: jest.fn(),
     };
 
     mockUserStore = {
-      userConnected: signal({ id: '123', name: 'Test User' })
+      userConnected: signal({ id: '123', name: 'Test User' }),
     };
 
     mockDialog = {
@@ -44,8 +44,8 @@ describe('TicketsComponent', () => {
       providers: [
         { provide: TicketsStore, useValue: mockTicketStore },
         { provide: UserStore, useValue: mockUserStore },
-        { provide: MatDialog, useValue: mockDialog }
-      ]
+        { provide: MatDialog, useValue: mockDialog },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TicketsComponent);

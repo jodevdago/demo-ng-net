@@ -13,10 +13,7 @@ describe('LayoutComponent', () => {
     };
 
     TestBed.configureTestingModule({
-      providers: [
-        LayoutComponent,
-        { provide: AuthService, useValue: authServiceMock },
-      ],
+      providers: [LayoutComponent, { provide: AuthService, useValue: authServiceMock }],
     });
 
     component = TestBed.inject(LayoutComponent);

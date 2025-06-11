@@ -23,20 +23,20 @@ describe('CreateTicketComponent', () => {
 
   beforeEach(async () => {
     mockUserService = {
-      getUsers: jest.fn().mockReturnValue(of(mockUsers))
+      getUsers: jest.fn().mockReturnValue(of(mockUsers)),
     };
 
     mockDialogRef = {
-      close: jest.fn()
+      close: jest.fn(),
     };
 
     mockTicketStore = {
       createTicket: jest.fn(),
-      updateTicket: jest.fn()
+      updateTicket: jest.fn(),
     };
 
     mockUserStore = {
-      userConnected: () => ({ role: 'Admin' })
+      userConnected: () => ({ role: 'Admin' }),
     };
 
     await TestBed.configureTestingModule({
@@ -46,8 +46,8 @@ describe('CreateTicketComponent', () => {
         { provide: MatDialogRef, useValue: mockDialogRef },
         { provide: MAT_DIALOG_DATA, useValue: null },
         { provide: TicketsStore, useValue: mockTicketStore },
-        { provide: UserStore, useValue: mockUserStore }
-      ]
+        { provide: UserStore, useValue: mockUserStore },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(CreateTicketComponent);
@@ -73,7 +73,7 @@ describe('CreateTicketComponent', () => {
       desc: 'Description',
       priority: 1,
       status: 'PENDING',
-      assigned: { id: '1', fullname: 'John Doe' }
+      assigned: { id: '1', fullname: 'John Doe' },
     });
 
     component.createOrUpdate();
@@ -83,7 +83,7 @@ describe('CreateTicketComponent', () => {
       desc: 'Description',
       priority: 1,
       status: 'PENDING',
-      assignedId: '1'
+      assignedId: '1',
     });
 
     expect(mockDialogRef.close).toHaveBeenCalled();
@@ -96,7 +96,7 @@ describe('CreateTicketComponent', () => {
       desc: 'Old description',
       priority: 2,
       status: 'IN_PROGRESS',
-      assigned: { id: '2', fullname: 'Jane Smith' }
+      assigned: { id: '2', fullname: 'Jane Smith' },
     };
 
     component.data = testData;
@@ -105,7 +105,7 @@ describe('CreateTicketComponent', () => {
       desc: 'Updated Desc',
       priority: 3,
       status: 'DONE',
-      assigned: { id: '2', fullname: 'Jane Smith' }
+      assigned: { id: '2', fullname: 'Jane Smith' },
     });
 
     component.createOrUpdate();
@@ -115,7 +115,7 @@ describe('CreateTicketComponent', () => {
       desc: 'Updated Desc',
       priority: 3,
       status: 'DONE',
-      assignedId: '2'
+      assignedId: '2',
     });
 
     expect(mockDialogRef.close).toHaveBeenCalled();

@@ -9,27 +9,23 @@ import {
   ViewChild,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import {
-  MAT_FORM_FIELD_DEFAULT_OPTIONS,
-  MatFormFieldModule,
-} from '@angular/material/form-field';
+import { MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
-import {
-  animate,
-  state,
-  style,
-  transition,
-  trigger,
-} from '@angular/animations';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 import { CommonModule } from '@angular/common';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { CreateTicketComponent } from './create-ticket/create-ticket.component';
 import { UserService } from '../../services/user.service';
-import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import {
+  CdkDragDrop,
+  DragDropModule,
+  moveItemInArray,
+  transferArrayItem,
+} from '@angular/cdk/drag-drop';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
@@ -73,10 +69,7 @@ import { TicketDto } from '@type/ticketDto.type';
     trigger('detailExpand', [
       state('collapsed,void', style({ height: '0px', minHeight: '0' })),
       state('expanded', style({ height: '*' })),
-      transition(
-        'expanded <=> collapsed',
-        animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')
-      ),
+      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
     ]),
   ],
   providers: [
@@ -91,14 +84,7 @@ export class TicketsComponent implements OnInit {
   private ticketStore = inject(TicketsStore);
   private userStore = inject(UserStore);
 
-  columnsToDisplay: string[] = [
-    'id',
-    'title',
-    'priority',
-    'assigned',
-    'createdOn',
-    'status'
-  ];
+  columnsToDisplay: string[] = ['id', 'title', 'priority', 'assigned', 'createdOn', 'status'];
   dataSource!: MatTableDataSource<Ticket>;
   columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand'];
   expandedElement: Ticket | null = null;
@@ -109,10 +95,10 @@ export class TicketsComponent implements OnInit {
   readonly TICKETSTATUS = TicketStatus;
 
   tickets = this.ticketStore.tickets;
-  pending = computed(() => this.tickets().filter(t => t.status === TicketStatus.PENDING));
-  inProgress = computed(() => this.tickets().filter(t => t.status === TicketStatus.INPROGRESS));
-  finished = computed(() => this.tickets().filter(t => t.status === TicketStatus.FINISHED));
-  closed = computed(() => this.tickets().filter(t => t.status === TicketStatus.CLOSED));
+  pending = computed(() => this.tickets().filter((t) => t.status === TicketStatus.PENDING));
+  inProgress = computed(() => this.tickets().filter((t) => t.status === TicketStatus.INPROGRESS));
+  finished = computed(() => this.tickets().filter((t) => t.status === TicketStatus.FINISHED));
+  closed = computed(() => this.tickets().filter((t) => t.status === TicketStatus.CLOSED));
 
   displayTable = true;
   user = this.userStore.userConnected;
@@ -136,15 +122,13 @@ export class TicketsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.assignedTo.valueChanges.pipe(
-      takeUntilDestroyed(this.destroyRef)
-    ).subscribe((userIds) => {
+    this.assignedTo.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((userIds) => {
       this.ticketStore.loadTicketsByUserIds(userIds || []);
     });
 
     const user = this.user();
     if (user.id) {
-      this.assignedTo.setValue([user.id])
+      this.assignedTo.setValue([user.id]);
     }
   }
 
@@ -161,7 +145,7 @@ export class TicketsComponent implements OnInit {
     const dialogRef = this.createDialog.open(CreateTicketComponent, {
       width: '500px',
       height: '600px',
-      data: data
+      data: data,
     });
   }
 
@@ -182,7 +166,7 @@ export class TicketsComponent implements OnInit {
         event.previousContainer.data,
         event.container.data,
         event.previousIndex,
-        event.currentIndex
+        event.currentIndex,
       );
       // 🔥 Update FireStore
       const ticketId = ticket.id ? ticket.id : null;
@@ -193,7 +177,7 @@ export class TicketsComponent implements OnInit {
           priority: ticket.priority,
           status: ticket.status,
           assignedId: ticket.assigned.id || '',
-        }
+        };
         this.ticketStore.updateTicket(ticketId, ticketDto);
       }
     }
@@ -201,11 +185,16 @@ export class TicketsComponent implements OnInit {
 
   getListByName(list: string): Ticket[] {
     switch (list) {
-      case 'pending': return this.pending();
-      case 'inProgress': return this.inProgress();
-      case 'finished': return this.finished();
-      case 'closed': return this.closed();
-      default: return [];
+      case 'pending':
+        return this.pending();
+      case 'inProgress':
+        return this.inProgress();
+      case 'finished':
+        return this.finished();
+      case 'closed':
+        return this.closed();
+      default:
+        return [];
     }
   }
 }

@@ -1,6 +1,5 @@
 table {
   width: 100%;
-  background: #ffffff;
 }
 
 .form-container {
@@ -13,9 +12,8 @@ table {
 
 mat-button-toggle-group {
   min-width: 120px;
-  flex-shrink: 0; 
+  flex-shrink: 0;
 }
-
 
 tr.example-detail-row {
   height: 0;
@@ -89,7 +87,6 @@ tr.example-element-row:not(.example-expanded-row):active {
   /* Effet accentué au clic */
 }
 
-
 .avatar {
   margin-top: 7.5px;
   width: 40px;
@@ -148,7 +145,7 @@ tr.example-element-row:not(.example-expanded-row):active {
 
 .btn-level-stat {
   height: 35px;
-  margin-inline-end: 10px; 
+  margin-inline-end: 10px;
   font-size: 15px;
   cursor: none;
 

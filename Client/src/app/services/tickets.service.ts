@@ -28,8 +28,8 @@ export class TicketsService {
   updateTicket(id: string, data: TicketDto): Observable<void> {
     const ticket = {
       ...data,
-      id: id
-    }
+      id: id,
+    };
     return this.http.put<void>(this.api + '/ticket/' + id, ticket);
   }
 

@@ -10,21 +10,15 @@ export const UserStore = signalStore(
   withState({
     userConnected: {} as User,
   }),
-  withMethods(
-    (
-      store,
-      userService = inject(UserService),
-      destroyRef = inject(DestroyRef)
-    ) => ({
-      loadProfile(): Observable<boolean> {
-        return userService.getProfile().pipe(
-          tap((user) => {
-            patchState(store, { userConnected: user });
-          }),
-          map((user) => user.auth),
-          takeUntilDestroyed(destroyRef)
-        );
-      },
-    })
-  )
+  withMethods((store, userService = inject(UserService), destroyRef = inject(DestroyRef)) => ({
+    loadProfile(): Observable<boolean> {
+      return userService.getProfile().pipe(
+        tap((user) => {
+          patchState(store, { userConnected: user });
+        }),
+        map((user) => user.auth),
+        takeUntilDestroyed(destroyRef),
+      );
+    },
+  })),
 );

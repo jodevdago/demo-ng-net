@@ -8,24 +8,22 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterOutlet,
-    MatProgressSpinnerModule,
-    MatSnackBarModule,
-  ],
+  imports: [CommonModule, RouterOutlet, MatProgressSpinnerModule, MatSnackBarModule],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  styleUrl: './app.component.scss',
 })
 export class AppComponent {
   title = 'support-it-app';
 
   loading = false;
 
-  constructor(private loaderService: LoaderService, private cdRef: ChangeDetectorRef) {}
+  constructor(
+    private loaderService: LoaderService,
+    private cdRef: ChangeDetectorRef,
+  ) {}
 
   ngOnInit() {
-    this.loaderService.loading$.subscribe(value => {
+    this.loaderService.loading$.subscribe((value) => {
       this.loading = value;
       this.cdRef.detectChanges();
     });

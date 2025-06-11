@@ -58,7 +58,7 @@ describe('LoginComponent', () => {
       'Test User',
       'test@example.com',
       'password123',
-      1
+      1,
     );
     expect(component.isSignUpMode()).toBe(false);
   });
@@ -71,18 +71,13 @@ describe('LoginComponent', () => {
 
     component.login();
 
-    expect(mockAuthService.login).toHaveBeenCalledWith(
-      'test@example.com',
-      'password123'
-    );
+    expect(mockAuthService.login).toHaveBeenCalledWith('test@example.com', 'password123');
     expect(mockRouter.navigate).toHaveBeenCalledWith(['./layout/tickets']);
   });
 
   it('should set error message on failed login', () => {
     const errorMessage = null;
-    mockAuthService.login = jest
-      .fn()
-      .mockReturnValue(throwError(() => errorMessage));
+    mockAuthService.login = jest.fn().mockReturnValue(throwError(() => errorMessage));
 
     component.loginForm.setValue({
       email: 'invalid-email',
@@ -127,10 +122,8 @@ describe('LoginComponent', () => {
   });
 
   it('should set error message on failed registration', () => {
-    const errorMessage = "Invalid credentials" ;
-    mockAuthService.register = jest
-      .fn()
-      .mockReturnValue(throwError(() => errorMessage));
+    const errorMessage = 'Invalid credentials';
+    mockAuthService.register = jest.fn().mockReturnValue(throwError(() => errorMessage));
 
     component.registrationForm.setValue({
       email: 'test@example.com',
@@ -150,10 +143,8 @@ describe('LoginComponent', () => {
   });
 
   it('should set error message on failed registration and reset after 3 seconds', () => {
-    const errorMessage = "Invalid credentials";
-    mockAuthService.register = jest
-      .fn()
-      .mockReturnValue(throwError(() => errorMessage));
+    const errorMessage = 'Invalid credentials';
+    mockAuthService.register = jest.fn().mockReturnValue(throwError(() => errorMessage));
 
     component.registrationForm.setValue({
       email: 'test@example.com',

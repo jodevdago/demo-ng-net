@@ -10,8 +10,8 @@ In a typical Angular application, developers use `localStorage` or `sessionStora
 
 When rendering on the server:
 
-* The app runs in a Node.js environment.
-* `window`, `document`, and `localStorage` are **not available**.
+- The app runs in a Node.js environment.
+- `window`, `document`, and `localStorage` are **not available**.
 
 Attempting to access them directly will throw runtime errors like:
 
@@ -81,8 +81,8 @@ If you ever want to switch to another storage mechanism (like `sessionStorage`, 
 
 ## 🧭 Summary
 
-| Feature             | Without `StorageService`        | With `StorageService`                |
-| ------------------- | ------------------------------- | ------------------------------------ |
+| Feature             | Without `StorageService`         | With `StorageService`                 |
+| ------------------- | -------------------------------- | ------------------------------------- |
 | SSR-Compatible      | ❌ Risk of runtime error         | ✅ Safe with platform checks          |
 | Centralized Logic   | ❌ Duplicated in multiple places | ✅ Clean and maintainable abstraction |
 | Testing Convenience | ❌ Hard to mock browser API      | ✅ Easy to mock and test              |

@@ -1,6 +1,5 @@
-import { TicketStatus } from "@enums/ticket-status.enum";
-import { User } from "./user.type";
-
+import { TicketStatus } from '@enums/ticket-status.enum';
+import { User } from './user.type';
 
 export interface Ticket {
   desc: string;

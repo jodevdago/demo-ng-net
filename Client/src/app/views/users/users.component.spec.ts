@@ -7,7 +7,20 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { UserService } from '@services/user.service';
 
 class MockUserService {
-  getUsers = jest.fn().mockReturnValue(of([{ id: '1', email: 'test@example.com', fullname: 'Test User', level: 1, role: 'User', auth: false }]));
+  getUsers = jest
+    .fn()
+    .mockReturnValue(
+      of([
+        {
+          id: '1',
+          email: 'test@example.com',
+          fullname: 'Test User',
+          level: 1,
+          role: 'User',
+          auth: false,
+        },
+      ]),
+    );
   updateUserField = jest.fn().mockReturnValue(of(void 0));
 }
 
@@ -21,9 +34,7 @@ describe('UsersComponent', () => {
 
     TestBed.configureTestingModule({
       imports: [UsersComponent, NoopAnimationsModule],
-      providers: [
-        { provide: UserService, useValue: mockUserService },
-      ],
+      providers: [{ provide: UserService, useValue: mockUserService }],
     }).compileComponents();
 
     fixture = TestBed.createComponent(UsersComponent);
@@ -54,19 +65,18 @@ describe('UsersComponent', () => {
       fullname: 'Test User',
       level: 1,
       role: 1,
-      auth: true
+      auth: true,
     };
 
     const expectedUpdatedUser: User = {
       ...user,
-      auth: false
+      auth: false,
     };
 
     component.change(user);
 
     expect(mockUserService.updateUserField).toHaveBeenCalledWith('1', expectedUpdatedUser);
   });
-
 
   it('should reset paginator to first page after filtering', () => {
     const paginatorSpy = jest.spyOn(MatPaginator.prototype, 'firstPage');

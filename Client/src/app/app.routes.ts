@@ -18,12 +18,12 @@ export const routes: Routes = [
   {
     path: 'unauthorized',
     component: UnauthorizedComponent,
-    title: 'Error 401'
+    title: 'Error 401',
   },
   {
     path: 'server-error',
     component: InternalServerErrorComponent,
-    title: 'Error 500'
+    title: 'Error 500',
   },
   {
     path: 'layout',
@@ -32,24 +32,26 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        loadComponent: () => import('./views/tickets/tickets.component').then(m => m.TicketsComponent),
+        loadComponent: () =>
+          import('./views/tickets/tickets.component').then((m) => m.TicketsComponent),
         title: 'Tickets',
       },
       {
         path: 'tickets',
-        loadComponent: () => import('./views/tickets/tickets.component').then(m => m.TicketsComponent),
+        loadComponent: () =>
+          import('./views/tickets/tickets.component').then((m) => m.TicketsComponent),
         title: 'Tickets',
       },
       {
         path: 'users',
-        loadComponent: () => import('./views/users/users.component').then(m => m.UsersComponent),
+        loadComponent: () => import('./views/users/users.component').then((m) => m.UsersComponent),
         canActivate: [userGuard],
         title: 'Users',
       },
-    ]
+    ],
   },
   {
     path: '**',
-    redirectTo: ''
+    redirectTo: '',
   },
-]
+];

@@ -10,31 +10,30 @@ import { Router } from '@angular/router';
 })
 export class AuthService {
   private readonly api = environment.apiUrl;
-  constructor(private http: HttpClient, private storage: StorageService, private router: Router) {}
+  constructor(
+    private http: HttpClient,
+    private storage: StorageService,
+    private router: Router,
+  ) {}
 
-  register(
-    fullname: string,
-    email: string,
-    password: string,
-    level: number
-  ): Observable<void> {
+  register(fullname: string, email: string, password: string, level: number): Observable<void> {
     let createUserDto = {
       auth: false,
       role: 1,
       level: level,
       email: email,
       fullname: fullname,
-      password: password
-    }
+      password: password,
+    };
     return this.http.post<void>(`${this.api}/user`, createUserDto);
   }
 
-  login(email: string, password: string): Observable<{token: string}> {
+  login(email: string, password: string): Observable<{ token: string }> {
     let loginDto = {
       email: email,
-      password: password
-    }
-    return this.http.post<{token: string}>(`${this.api}/login`, loginDto);
+      password: password,
+    };
+    return this.http.post<{ token: string }>(`${this.api}/login`, loginDto);
   }
 
   logout(): Observable<void> {

@@ -10,15 +10,9 @@
     <mat-divider></mat-divider>
   </div>
 
-
   @for (route of user().role == 'Admin' ? routeLinksAdmin : routeLinks; track $index) {
     <mat-list class="nav m-0 p-0">
-      <a
-        mat-list-item
-        routerLinkActive="active-link"
-        class="hover"
-        routerLink="{{ route.link }}"
-      >
+      <a mat-list-item routerLinkActive="active-link" class="hover" routerLink="{{ route.link }}">
         <mat-icon
           mat-list-icon
           [matTooltip]="!isExpanded ? route.name : null"
@@ -38,17 +32,13 @@
       <mat-divider></mat-divider>
     </div>
     <mat-list class="nav m-0 p-0">
-      <a
-        mat-list-item
-        class="hover"
-        (click)="logout()"
-      >
+      <a mat-list-item class="hover" (click)="logout()">
         <mat-icon
           mat-list-icon
           [matTooltip]="!isExpanded ? 'logout' : null"
           matTooltipPosition="right"
         >
-        exit_to_app</mat-icon
+          exit_to_app</mat-icon
         >
         @if (isExpanded) {
           <span matLine class="ms-4 mb-3">Log out</span>
@@ -56,7 +46,4 @@
       </a>
     </mat-list>
   </div>
-
 </section>
-
-

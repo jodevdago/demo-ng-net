@@ -8,9 +8,8 @@ describe('ServerErrorComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [InternalServerErrorComponent]
-    })
-    .compileComponents();
+      imports: [InternalServerErrorComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(InternalServerErrorComponent);
     component = fixture.componentInstance;

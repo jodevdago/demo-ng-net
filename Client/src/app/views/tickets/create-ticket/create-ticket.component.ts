@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, inject, Inject, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  inject,
+  Inject,
+  OnInit,
+} from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -7,12 +14,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { CommonModule } from '@angular/common';
-import {
-  FormBuilder,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { map, Observable, of, startWith } from 'rxjs';
 import { MatDividerModule } from '@angular/material/divider';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -36,7 +38,7 @@ import { TicketDto } from '@type/ticketDto.type';
     MatAutocompleteModule,
     CommonModule,
     ReactiveFormsModule,
-    MatDividerModule
+    MatDividerModule,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './create-ticket.component.html',
@@ -67,22 +69,23 @@ export class CreateTicketComponent implements OnInit {
       status: [data?.status || TicketStatus.PENDING, Validators.required],
     });
 
-    this.usersService.getUsers().pipe(
-      takeUntilDestroyed(this.destroyRef)
-    ).subscribe(x => {
-      this.options = x;
-    });
+    this.usersService
+      .getUsers()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((x) => {
+        this.options = x;
+      });
   }
 
   ngOnInit(): void {
     this.users$ = this.form.get('assigned')!.valueChanges.pipe(
       takeUntilDestroyed(this.destroyRef),
       startWith(''),
-      map(value => {
+      map((value) => {
         const name = typeof value === 'string' ? value : value?.fullname;
         return name ? this._filter(name as string) : this.options.slice();
       }),
-    )
+    );
 
     const userConnected = this.userStore.userConnected;
     if (userConnected().role == 'Admin') {
@@ -131,6 +134,6 @@ export class CreateTicketComponent implements OnInit {
 
   private _filter(name: string): User[] {
     const filterValue = name.toLowerCase();
-    return this.options.filter(option => option.fullname.toLowerCase().includes(filterValue));
+    return this.options.filter((option) => option.fullname.toLowerCase().includes(filterValue));
   }
 }

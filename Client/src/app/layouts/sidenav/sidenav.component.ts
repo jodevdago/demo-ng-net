@@ -10,13 +10,7 @@ import { UserStore } from '@store/user.store';
 @Component({
   selector: 'app-sidenav',
   standalone: true,
-  imports: [
-    MatListModule,
-    MatIconModule,
-    MatTooltipModule,
-    CommonModule,
-    RouterModule,
-  ],
+  imports: [MatListModule, MatIconModule, MatTooltipModule, CommonModule, RouterModule],
   templateUrl: './sidenav.component.html',
   styleUrl: './sidenav.component.scss',
 })
@@ -34,9 +28,7 @@ export class SidenavComponent {
     { link: './users', name: 'Users', icon: 'supervised_user_circle' },
   ];
 
-  routeLinks = [
-    { link: './tickets', name: 'Tickets', icon: 'view_agenda' },
-  ];
+  routeLinks = [{ link: './tickets', name: 'Tickets', icon: 'view_agenda' }];
 
   logout(): void {
     this.authService.logout();

@@ -12,10 +12,7 @@ describe('UnauthorizedComponent', () => {
     } as unknown as Router;
 
     TestBed.configureTestingModule({
-      providers: [
-        UnauthorizedComponent,
-        { provide: Router, useValue: mockRouter },
-      ],
+      providers: [UnauthorizedComponent, { provide: Router, useValue: mockRouter }],
     });
 
     component = TestBed.inject(UnauthorizedComponent);
@@ -30,4 +27,3 @@ describe('UnauthorizedComponent', () => {
     expect(mockRouter.navigate).toHaveBeenCalledWith(['./login']);
   });
 });
-

@@ -13,7 +13,7 @@ describe('TicketsService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [TicketsService]
+      providers: [TicketsService],
     });
     service = TestBed.inject(TicketsService);
     httpMock = TestBed.inject(HttpTestingController);
@@ -26,7 +26,7 @@ describe('TicketsService', () => {
   it('should fetch all tickets', () => {
     const mockTickets: any[] = [{ id: '1' }, { id: '2' }];
 
-    service.getTickets().subscribe(tickets => {
+    service.getTickets().subscribe((tickets) => {
       expect(tickets.length).toBe(2);
       expect(tickets).toEqual(mockTickets);
     });
@@ -37,9 +37,15 @@ describe('TicketsService', () => {
   });
 
   it('should create a ticket', () => {
-    const newTicket: TicketDto = { title: 'Updated', desc: 'Updated desc', assignedId: 'user2', priority: 0, status: TicketStatus.PENDING };
+    const newTicket: TicketDto = {
+      title: 'Updated',
+      desc: 'Updated desc',
+      assignedId: 'user2',
+      priority: 0,
+      status: TicketStatus.PENDING,
+    };
 
-    service.createTicket(newTicket).subscribe(result => {
+    service.createTicket(newTicket).subscribe((result) => {
       expect(result).toEqual(newTicket);
     });
 
@@ -52,7 +58,7 @@ describe('TicketsService', () => {
   it('should delete a ticket by id', () => {
     const id = '123';
 
-    service.deleteTicket(id).subscribe(result => {
+    service.deleteTicket(id).subscribe((result) => {
       expect(result).toBeUndefined();
     });
 
@@ -63,9 +69,15 @@ describe('TicketsService', () => {
 
   it('should update a ticket', () => {
     const id = '123';
-    const updateData: TicketDto = { title: 'Updated', desc: 'Updated desc', assignedId: 'user2', priority: 0, status: TicketStatus.PENDING };
+    const updateData: TicketDto = {
+      title: 'Updated',
+      desc: 'Updated desc',
+      assignedId: 'user2',
+      priority: 0,
+      status: TicketStatus.PENDING,
+    };
 
-    service.updateTicket(id, updateData).subscribe(result => {
+    service.updateTicket(id, updateData).subscribe((result) => {
       expect(result).toBeUndefined();
     });
 
@@ -78,11 +90,11 @@ describe('TicketsService', () => {
   it('should get tickets by userIds', () => {
     const userIds = ['u1', 'u2'];
     const mockTickets: any[] = [
-      { id: '1', title: 'T1', desc: '', assignedTo: { id : 'u1'} },
-      { id: '2', title: 'T2', desc: '', assignedTo: { id: 'u2'} }
+      { id: '1', title: 'T1', desc: '', assignedTo: { id: 'u1' } },
+      { id: '2', title: 'T2', desc: '', assignedTo: { id: 'u2' } },
     ];
 
-    service.getTicketByUsers(userIds).subscribe(tickets => {
+    service.getTicketByUsers(userIds).subscribe((tickets) => {
       expect(tickets).toEqual(mockTickets);
     });
 

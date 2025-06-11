@@ -5,20 +5,20 @@ import { StorageService } from './services/storage.service';
 
 @Injectable()
 export class AppInterceptor implements HttpInterceptor {
-    private readonly storage = inject(StorageService);
+  private readonly storage = inject(StorageService);
 
-    intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        const token = this.storage.getItem('jwt');
+  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    const token = this.storage.getItem('jwt');
 
-        if (token) {
-        const cloned = req.clone({
-            setHeaders: {
-            Authorization: `Bearer ${token}`,
-            },
-        });
-        return next.handle(cloned);
-        }
-
-        return next.handle(req);
+    if (token) {
+      const cloned = req.clone({
+        setHeaders: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return next.handle(cloned);
     }
+
+    return next.handle(req);
+  }
 }

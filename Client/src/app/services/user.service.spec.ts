@@ -16,10 +16,7 @@ describe('UserService', () => {
     };
 
     TestBed.configureTestingModule({
-      providers: [
-        UserService,
-        { provide: HttpClient, useValue: httpClientMock },
-      ],
+      providers: [UserService, { provide: HttpClient, useValue: httpClientMock }],
     });
 
     service = TestBed.inject(UserService);
@@ -43,7 +40,14 @@ describe('UserService', () => {
 
   it('should call updateUserField() with correct URL and data', () => {
     const userId = '123';
-    const user: User = { id: userId, fullname: 'Alice', auth: true, email: 'test@test.com', level: 3, role: 1 };
+    const user: User = {
+      id: userId,
+      fullname: 'Alice',
+      auth: true,
+      email: 'test@test.com',
+      level: 3,
+      role: 1,
+    };
     httpMock.put.mockReturnValue(of(void 0));
 
     service.updateUserField(userId, user).subscribe((res) => {
@@ -54,7 +58,14 @@ describe('UserService', () => {
   });
 
   it('should call getProfile() with correct URL', () => {
-    const mockProfile: User = { id: '123', fullname: 'Alice', auth: true, email: 'test@test.com', level: 3, role: 1 };
+    const mockProfile: User = {
+      id: '123',
+      fullname: 'Alice',
+      auth: true,
+      email: 'test@test.com',
+      level: 3,
+      role: 1,
+    };
     httpMock.get.mockReturnValue(of(mockProfile));
 
     service.getProfile().subscribe((profile) => {

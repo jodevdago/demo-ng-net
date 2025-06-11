@@ -3,24 +3,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
-import {
-  MAT_FORM_FIELD_DEFAULT_OPTIONS,
-  MatFormFieldModule,
-} from '@angular/material/form-field';
+import { MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import {
-  animate,
-  state,
-  style,
-  transition,
-  trigger,
-} from '@angular/animations';
-import {
-  FormBuilder,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { timer } from 'rxjs';
 import { Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -53,14 +39,14 @@ import { StorageService } from '@services/storage.service';
         style({
           height: '*',
           opacity: 1,
-        })
+        }),
       ),
       state(
         'signup',
         style({
           height: '*',
           opacity: 1,
-        })
+        }),
       ),
       transition('login <=> signup', [
         style({ height: 0, opacity: 0 }),
@@ -89,13 +75,16 @@ export class LoginComponent {
     private destroyRef: DestroyRef,
     private storage: StorageService,
   ) {
-    this.registrationForm = this.fb.group({
-      email: ['', Validators.required],
-      password: ['', Validators.required],
-      confirmPassword: ['', Validators.required],
-      level: [1, Validators.required],
-      fullname: ['', Validators.required],
-    }, { validator: this.passwordMatchValidator });
+    this.registrationForm = this.fb.group(
+      {
+        email: ['', Validators.required],
+        password: ['', Validators.required],
+        confirmPassword: ['', Validators.required],
+        level: [1, Validators.required],
+        fullname: ['', Validators.required],
+      },
+      { validator: this.passwordMatchValidator },
+    );
 
     this.loginForm = this.fb.group({
       email: ['', Validators.required],
@@ -148,7 +137,7 @@ export class LoginComponent {
         this.registrationForm.get('fullname')?.value,
         this.registrationForm.get('email')?.value,
         this.registrationForm.get('password')?.value,
-        this.registrationForm.get('level')?.value
+        this.registrationForm.get('level')?.value,
       )
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
@@ -168,19 +157,15 @@ export class LoginComponent {
 
   login(): void {
     this.authService
-      .login(
-        this.loginForm.get('email')?.value,
-        this.loginForm.get('password')?.value
-      )
-      .pipe(
-        takeUntilDestroyed(this.destroyRef))
+      .login(this.loginForm.get('email')?.value, this.loginForm.get('password')?.value)
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (res) => {
           this.storage.setItem('jwt', res.token);
           this.router.navigate(['./layout/tickets']);
         },
         error: (err: HttpErrorResponse) => {
-          if(err.status == 401 || err.status == 400) {
+          if (err.status == 401 || err.status == 400) {
             this.errorLoginMessage = 'Invalid credentials';
           }
           timer(3000)

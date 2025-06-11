@@ -17,7 +17,7 @@ export const TicketsStore = signalStore(
       store,
       ticketsService = inject(TicketsService),
       snackBar = inject(MatSnackBar),
-      destroyRef = inject(DestroyRef)
+      destroyRef = inject(DestroyRef),
     ) => ({
       loadTicketsByUserIds(userIds: string[]) {
         const request$ = userIds.length
@@ -75,6 +75,6 @@ export const TicketsStore = signalStore(
             });
           });
       },
-    })
-  )
+    }),
+  ),
 );

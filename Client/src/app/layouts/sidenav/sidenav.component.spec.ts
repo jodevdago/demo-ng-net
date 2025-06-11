@@ -82,9 +82,7 @@ describe('SidenavComponent', () => {
 
   // Test that the routeLinks are initialized correctly if the user is not an admin
   it('should have correct routeLinks', () => {
-    const expectedLinks = [
-      { link: './tickets', name: 'Tickets', icon: 'view_agenda' },
-    ];
+    const expectedLinks = [{ link: './tickets', name: 'Tickets', icon: 'view_agenda' }];
     expect(component.routeLinks).toEqual(expectedLinks);
   });
 

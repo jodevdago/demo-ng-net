@@ -5,7 +5,12 @@ import { provideClientHydration } from '@angular/platform-browser';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { routes } from './app.routes';
 
-import { HTTP_INTERCEPTORS, provideHttpClient, withFetch, withInterceptorsFromDi } from '@angular/common/http';
+import {
+  HTTP_INTERCEPTORS,
+  provideHttpClient,
+  withFetch,
+  withInterceptorsFromDi,
+} from '@angular/common/http';
 import { AppInterceptor } from './app.interceptor';
 import { HttpErrorInterceptor } from './http-error.interceptor';
 import { LoaderInterceptor } from './loader.interceptor';
@@ -31,11 +36,11 @@ export const appConfig: ApplicationConfig = {
     {
       provide: HTTP_INTERCEPTORS,
       useClass: LoaderInterceptor,
-      multi: true
+      multi: true,
     },
     {
       provide: TitleStrategy,
       useClass: CustomTitleStrategy,
-    }
+    },
   ],
 };

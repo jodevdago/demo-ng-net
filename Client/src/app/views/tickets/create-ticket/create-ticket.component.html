@@ -1,11 +1,14 @@
 <form [formGroup]="form" (ngSubmit)="createOrUpdate()">
   <div class="p-6">
-    <h6>@if (data) { Edit } @else { Create } a ticket</h6>
-    <mat-form-field
-      appearance="outline"
-      floatLabel="always"
-      class="w-full mt-5"
-    >
+    <h6>
+      @if (data) {
+        Edit
+      } @else {
+        Create
+      }
+      a ticket
+    </h6>
+    <mat-form-field appearance="outline" floatLabel="always" class="w-full mt-5">
       <mat-label>Title</mat-label>
       <input matInput formControlName="title" placeholder="Ex. Network error" />
     </mat-form-field>
@@ -20,15 +23,10 @@
       </mat-form-field>
       <mat-form-field appearance="outline" floatLabel="always">
         <mat-label>Assigned to</mat-label>
-        <input
-          type="text"
-          matInput
-          formControlName="assigned"
-          [matAutocomplete]="auto"
-        />
+        <input type="text" matInput formControlName="assigned" [matAutocomplete]="auto" />
         <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
           @for (user of users$ | async; track user) {
-          <mat-option [value]="user">{{ user.fullname }}</mat-option>
+            <mat-option [value]="user">{{ user.fullname }}</mat-option>
           }
         </mat-autocomplete>
       </mat-form-field>
@@ -52,7 +50,11 @@
     <div class="flex justify-end items-center mt-8">
       <button mat-button type="button" mat-dialog-close>Cancel</button>
       <button mat-button [disabled]="!form.valid" type="submit">
-        @if (data) { Edit } @else { Create }
+        @if (data) {
+          Edit
+        } @else {
+          Create
+        }
       </button>
     </div>
   </div>
