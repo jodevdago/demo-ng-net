@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { environment } from '../../environments/environment';
 import { TicketsService } from './tickets.service';
-import { TicketDto } from '@type/ticketDto.type';
+import { TicketDto } from '../types/ticketDto.type';
 import { TicketStatus } from '@enums/ticket-status.enum';
 
 describe('TicketsService', () => {

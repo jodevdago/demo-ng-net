@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Ticket } from '../type/ticket.type';
+import { Ticket } from '../types/ticket.type';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { TicketDto } from '../type/ticketDto.type';
+import { TicketDto } from '../types/ticketDto.type';
 
 @Injectable({
   providedIn: 'root',

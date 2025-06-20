@@ -1,4 +1,4 @@
-import { Ticket } from '@type/ticket.type';
+import { Ticket } from '../../types/ticket.type';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { signal } from '@angular/core';
 import { TicketsComponent } from './tickets.component';

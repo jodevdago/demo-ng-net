@@ -1,4 +1,4 @@
-import { User } from '@type/user.type';
+import { User } from '../../types/user.type';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { UsersComponent } from './users.component';
 import { of } from 'rxjs';

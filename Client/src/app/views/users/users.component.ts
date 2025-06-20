@@ -12,7 +12,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { switchMap } from 'rxjs';
 import { LevelPipe } from '@pipes/level.pipe';
 import { UserService } from '@services/user.service';
-import { User } from '@type/user.type';
+import { User } from '../../types/user.type';
 
 @Component({
   selector: 'app-users',

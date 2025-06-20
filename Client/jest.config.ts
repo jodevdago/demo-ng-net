@@ -97,7 +97,7 @@ const config: Config = {
     '^@services/(.*)$': '<rootDir>/src/app/services/$1',
     '^@enums/(.*)$': '<rootDir>/src/app/enums/$1',
     '^@pipes/(.*)$': '<rootDir>/src/app/pipes/$1',
-    '^@type/(.*)$': '<rootDir>/src/app/type/$1',
+    '^@types/(.*)$': '<rootDir>/src/app/types/$1',
     '^@guards/(.*)$': '<rootDir>/src/app/guards/$1',
   },
 

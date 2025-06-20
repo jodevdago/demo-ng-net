@@ -22,8 +22,8 @@ import { TicketsStore } from '@store/ticket.store';
 import { UserStore } from '@store/user.store';
 import { UserService } from '@services/user.service';
 import { TicketStatus } from '@enums/ticket-status.enum';
-import { User } from '@type/user.type';
-import { TicketDto } from '@type/ticketDto.type';
+import { User } from '../../../types/user.type';
+import { TicketDto } from '../../../types/ticketDto.type';
 
 @Component({
   selector: 'app-create-ticket',

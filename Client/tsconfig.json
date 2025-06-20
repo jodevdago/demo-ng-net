@@ -27,7 +27,7 @@
       "@pipes/*": ["./src/app/pipes/*"],
       "@services/*": ["./src/app/services/*"],
       "@store/*": ["./src/app/store/*"],
-      "@type/*": ["./src/app/type/*"],
+      "@types/*": ["./src/app/types/*"],
       "@enums/*": ["./src/app/enums/*"],
       "@guards/*": ["./src/app/guards/*"],
     },

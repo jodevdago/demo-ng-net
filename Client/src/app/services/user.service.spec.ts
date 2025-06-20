@@ -3,7 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { of } from 'rxjs';
-import { User } from '@type/user.type';
+import { User } from '../types/user.type';
 
 describe('UserService', () => {
   let service: UserService;

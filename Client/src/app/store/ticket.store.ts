@@ -1,9 +1,9 @@
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { inject, DestroyRef } from '@angular/core';
-import { Ticket } from '../type/ticket.type';
+import { Ticket } from '../types/ticket.type';
 import { TicketsService } from '../services/tickets.service';
 import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
-import { TicketDto } from '../type/ticketDto.type';
+import { TicketDto } from '../types/ticketDto.type';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 export const TicketsStore = signalStore(

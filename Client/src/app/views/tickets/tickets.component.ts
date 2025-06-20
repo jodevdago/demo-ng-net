@@ -37,8 +37,8 @@ import { LevelPipe } from '@pipes/level.pipe';
 import { TicketsStore } from '@store/ticket.store';
 import { UserStore } from '@store/user.store';
 import { TicketStatus } from '@enums/ticket-status.enum';
-import { Ticket } from '@type/ticket.type';
-import { TicketDto } from '@type/ticketDto.type';
+import { Ticket } from '../../types/ticket.type';
+import { TicketDto } from '../../types/ticketDto.type';
 
 @Component({
   selector: 'app-tickets',
