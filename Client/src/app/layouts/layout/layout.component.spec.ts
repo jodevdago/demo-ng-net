@@ -5,7 +5,6 @@ import { AuthService } from '@services/auth.service';
 
 describe('LayoutComponent', () => {
   let component: LayoutComponent;
-  let authService: AuthService;
 
   beforeEach(() => {
     const authServiceMock = {
@@ -17,7 +16,6 @@ describe('LayoutComponent', () => {
     });
 
     component = TestBed.inject(LayoutComponent);
-    authService = TestBed.inject(AuthService);
   });
 
   it('should create the component', () => {

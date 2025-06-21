@@ -1,9 +1,11 @@
+import { User } from './../types/user.type';
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { environment } from '../../environments/environment';
 import { TicketsService } from './tickets.service';
 import { TicketDto } from '../types/ticketDto.type';
 import { TicketStatus } from '@enums/ticket-status.enum';
+import { Ticket } from '../types/ticket.type';
 
 describe('TicketsService', () => {
   let service: TicketsService;
@@ -24,7 +26,7 @@ describe('TicketsService', () => {
   });
 
   it('should fetch all tickets', () => {
-    const mockTickets: any[] = [{ id: '1' }, { id: '2' }];
+    const mockTickets: Partial<Ticket>[] = [{ id: '1' }, { id: '2' }];
 
     service.getTickets().subscribe((tickets) => {
       expect(tickets.length).toBe(2);
@@ -89,9 +91,9 @@ describe('TicketsService', () => {
 
   it('should get tickets by userIds', () => {
     const userIds = ['u1', 'u2'];
-    const mockTickets: any[] = [
-      { id: '1', title: 'T1', desc: '', assignedTo: { id: 'u1' } },
-      { id: '2', title: 'T2', desc: '', assignedTo: { id: 'u2' } },
+    const mockTickets: Partial<Ticket>[] = [
+      { id: '1', title: 'T1', desc: '', assigned: { id: 'u1' } as User },
+      { id: '2', title: 'T2', desc: '', assigned: { id: 'u2' } as User },
     ];
 
     service.getTicketByUsers(userIds).subscribe((tickets) => {

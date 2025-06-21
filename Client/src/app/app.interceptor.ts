@@ -7,7 +7,7 @@ import { StorageService } from './services/storage.service';
 export class AppInterceptor implements HttpInterceptor {
   private readonly storage = inject(StorageService);
 
-  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+  intercept(req: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     const token = this.storage.getItem('jwt');
 
     if (token) {

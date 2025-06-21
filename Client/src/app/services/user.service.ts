@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { User } from '../types/user.type';
@@ -10,10 +10,10 @@ import { User } from '../types/user.type';
 export class UserService {
   private readonly api = environment.apiUrl;
 
-  constructor(private http: HttpClient) {}
+  http = inject(HttpClient);
 
-  getUsers(): Observable<any[]> {
-    return this.http.get<any[]>(this.api + '/user');
+  getUsers(): Observable<Partial<User>[]> {
+    return this.http.get<Partial<User>[]>(this.api + '/user');
   }
 
   updateUserField(userId: string, user: User): Observable<void> {

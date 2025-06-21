@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
@@ -10,14 +10,13 @@ import { Router } from '@angular/router';
 })
 export class AuthService {
   private readonly api = environment.apiUrl;
-  constructor(
-    private http: HttpClient,
-    private storage: StorageService,
-    private router: Router,
-  ) {}
+
+  http = inject(HttpClient);
+  storage = inject(StorageService);
+  router = inject(Router);
 
   register(fullname: string, email: string, password: string, level: number): Observable<void> {
-    let createUserDto = {
+    const createUserDto = {
       auth: false,
       role: 1,
       level: level,
@@ -29,7 +28,7 @@ export class AuthService {
   }
 
   login(email: string, password: string): Observable<{ token: string }> {
-    let loginDto = {
+    const loginDto = {
       email: email,
       password: password,
     };

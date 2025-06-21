@@ -1,4 +1,4 @@
-import { Component, DestroyRef, signal } from '@angular/core';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -68,13 +68,13 @@ export class LoginComponent {
   errorRegistrationMessage: string | null = null;
   errorLoginMessage: string | null = null;
 
-  constructor(
-    private fb: FormBuilder,
-    private authService: AuthService,
-    private router: Router,
-    private destroyRef: DestroyRef,
-    private storage: StorageService,
-  ) {
+  fb = inject(FormBuilder);
+  authService = inject(AuthService);
+  router = inject(Router);
+  destroyRef = inject(DestroyRef);
+  storage = inject(StorageService);
+
+  constructor() {
     this.registrationForm = this.fb.group(
       {
         email: ['', Validators.required],
@@ -144,7 +144,7 @@ export class LoginComponent {
         next: () => {
           this.onLogin();
         },
-        error: (err) => {
+        error: () => {
           this.errorRegistrationMessage = 'Invalid credentials';
           timer(3000)
             .pipe(takeUntilDestroyed(this.destroyRef))

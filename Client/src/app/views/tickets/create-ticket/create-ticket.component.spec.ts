@@ -1,3 +1,4 @@
+import { User } from './../../../types/user.type';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CreateTicketComponent } from './create-ticket.component';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -5,16 +6,18 @@ import { of } from 'rxjs';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { UserService } from '@services/user.service';
-import { TicketsStore } from '@store/ticket.store';
 import { UserStore } from '@store/user.store';
+import { TicketStatus } from '@enums/ticket-status.enum';
+import { DialogRef } from '@angular/cdk/dialog';
+import { TicketsStore } from '@store/ticket.store';
 
 describe('CreateTicketComponent', () => {
   let component: CreateTicketComponent;
   let fixture: ComponentFixture<CreateTicketComponent>;
-  let mockUserService: any;
-  let mockDialogRef: any;
-  let mockTicketStore: any;
-  let mockUserStore: any;
+  let mockUserService: Partial<UserService>;
+  let mockDialogRef: Partial<DialogRef>;
+  let mockTicketStore: Partial<typeof TicketsStore.prototype>;
+  let mockUserStore: Partial<typeof UserStore.prototype>;
 
   const mockUsers = [
     { id: '1', fullname: 'John Doe' },
@@ -72,13 +75,13 @@ describe('CreateTicketComponent', () => {
       title: 'New Ticket',
       desc: 'Description',
       priority: 1,
-      status: 'PENDING',
-      assigned: { id: '1', fullname: 'John Doe' },
+      status: TicketStatus.PENDING,
+      assigned: { id: '1', fullname: 'John Doe' } as User,
     });
 
     component.createOrUpdate();
 
-    expect(mockTicketStore.createTicket).toHaveBeenCalledWith({
+    expect(mockTicketStore['createTicket']).toHaveBeenCalledWith({
       title: 'New Ticket',
       desc: 'Description',
       priority: 1,
@@ -104,17 +107,17 @@ describe('CreateTicketComponent', () => {
       title: 'Updated Title',
       desc: 'Updated Desc',
       priority: 3,
-      status: 'DONE',
-      assigned: { id: '2', fullname: 'Jane Smith' },
+      status: TicketStatus.FINISHED,
+      assigned: { id: '2', fullname: 'Jane Smith' } as User,
     });
 
     component.createOrUpdate();
 
-    expect(mockTicketStore.updateTicket).toHaveBeenCalledWith('ticket123', {
+    expect(mockTicketStore['updateTicket']).toHaveBeenCalledWith('ticket123', {
       title: 'Updated Title',
       desc: 'Updated Desc',
       priority: 3,
-      status: 'DONE',
+      status: TicketStatus.FINISHED,
       assignedId: '2',
     });
 
@@ -122,7 +125,7 @@ describe('CreateTicketComponent', () => {
   });
 
   it('should disable fields for non-admin users', () => {
-    mockUserStore.userConnected = () => ({ role: 'User' });
+    mockUserStore['userConnected'] = () => ({ role: 'User' });
 
     // Force re-run ngOnInit
     component.ngOnInit();

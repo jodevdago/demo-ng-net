@@ -7,20 +7,18 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { UserService } from '@services/user.service';
 
 class MockUserService {
-  getUsers = jest
-    .fn()
-    .mockReturnValue(
-      of([
-        {
-          id: '1',
-          email: 'test@example.com',
-          fullname: 'Test User',
-          level: 1,
-          role: 'User',
-          auth: false,
-        },
-      ]),
-    );
+  getUsers = jest.fn().mockReturnValue(
+    of([
+      {
+        id: '1',
+        email: 'test@example.com',
+        fullname: 'Test User',
+        level: 1,
+        role: 'User',
+        auth: false,
+      },
+    ]),
+  );
   updateUserField = jest.fn().mockReturnValue(of(void 0));
 }
 

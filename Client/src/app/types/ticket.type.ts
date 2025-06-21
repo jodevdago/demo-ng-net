@@ -5,7 +5,7 @@ export interface Ticket {
   desc: string;
   priority: number;
   title: string;
-  createdOn: Date | any;
+  createdOn: Date | string;
   assigned: User;
   id?: string;
   status: TicketStatus;

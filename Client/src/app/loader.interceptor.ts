@@ -7,7 +7,7 @@ import { LoaderService } from './services/loader.service';
 export class LoaderInterceptor implements HttpInterceptor {
   private readonly loaderService = inject(LoaderService);
 
-  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+  intercept(req: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     this.loaderService.show();
 
     return next.handle(req).pipe(finalize(() => this.loaderService.hide()));

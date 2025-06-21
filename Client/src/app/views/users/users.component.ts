@@ -1,4 +1,4 @@
-import { Component, DestroyRef, OnInit, ViewChild } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, ViewChild } from '@angular/core';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -39,16 +39,14 @@ import { User } from '../../types/user.type';
 })
 export class UsersComponent implements OnInit {
   displayedColumns: string[] = ['id', 'email', 'fullname', 'level', 'role', 'auth'];
-  dataSource!: MatTableDataSource<User[]>;
+  dataSource!: MatTableDataSource<Partial<User>>;
 
   @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
   @ViewChild(MatSort) sort: MatSort | null = null;
 
-  constructor(
-    private service: UserService,
-    private destroyRef: DestroyRef,
-    private snackBar: MatSnackBar,
-  ) {}
+  service = inject(UserService);
+  destroyRef = inject(DestroyRef);
+  snackBar = inject(MatSnackBar);
 
   ngOnInit(): void {
     this.service
@@ -71,7 +69,7 @@ export class UsersComponent implements OnInit {
   }
 
   change(row: User): void {
-    const id = <string>row.id;
+    const id = row.id as string;
     this.service
       .updateUserField(id, { ...row, auth: !row.auth })
       .pipe(

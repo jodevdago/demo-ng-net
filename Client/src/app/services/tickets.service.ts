@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Ticket } from '../types/ticket.type';
 import { HttpClient } from '@angular/common/http';
@@ -11,7 +11,7 @@ import { TicketDto } from '../types/ticketDto.type';
 export class TicketsService {
   private readonly api = environment.apiUrl;
 
-  constructor(private http: HttpClient) {}
+  http = inject(HttpClient);
 
   getTickets(): Observable<Ticket[]> {
     return this.http.get<Ticket[]>(this.api + '/ticket');

@@ -9,14 +9,15 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { of } from 'rxjs';
 import { TicketsStore } from '@store/ticket.store';
 import { UserStore } from '@store/user.store';
+import { Dialog } from '@angular/cdk/dialog';
 
 describe('TicketsComponent', () => {
   let component: TicketsComponent;
   let fixture: ComponentFixture<TicketsComponent>;
 
-  let mockTicketStore: any;
-  let mockUserStore: any;
-  let mockDialog: any;
+  let mockTicketStore: Partial<typeof TicketsStore.prototype>;
+  let mockUserStore: Partial<typeof UserStore.prototype>;
+  let mockDialog: Partial<Dialog>;
 
   beforeEach(async () => {
     mockTicketStore = {
@@ -63,7 +64,7 @@ describe('TicketsComponent', () => {
     component.dataSource = new MatTableDataSource([
       { id: '1', title: 'Test Ticket' },
       { id: '2', title: 'Another Ticket' },
-    ] as any);
+    ] as Ticket[]);
 
     component.applyFilter(mockEvent);
 
@@ -72,7 +73,7 @@ describe('TicketsComponent', () => {
 
   it('should call deleteTicket when onDeleteTicket is called', () => {
     component.onDeleteTicket('1');
-    expect(mockTicketStore.deleteTicket).toHaveBeenCalledWith('1');
+    expect(mockTicketStore['deleteTicket']).toHaveBeenCalledWith('1');
   });
 
   it('should filter tickets by status in getListByName', () => {

@@ -44,6 +44,6 @@ describe('InitialsPipe', () => {
   });
 
   it('should return correct initials when words contain special characters', () => {
-    expect(pipe.transform('anne-marie o\'neill')).toBe('AO');
+    expect(pipe.transform("anne-marie o'neill")).toBe('AO');
   });
 });

@@ -12,8 +12,8 @@ import { UserStore } from '@store/user.store';
 describe('SidenavComponent', () => {
   let component: SidenavComponent;
   let fixture: ComponentFixture<SidenavComponent>;
-  let mockAuthService: any;
-  let mockUserSTore: any;
+  let mockAuthService: Partial<AuthService>;
+  let mockUserSTore: Partial<typeof UserStore.prototype>;
 
   beforeEach(async () => {
     // Mock the services

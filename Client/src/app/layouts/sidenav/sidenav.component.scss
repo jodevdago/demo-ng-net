@@ -25,7 +25,8 @@
   }
 
   mat-list-item,
-  a {
+  a,
+  button[mat-list-item] {
     border: none;
     box-sizing: border-box;
     text-decoration: none;

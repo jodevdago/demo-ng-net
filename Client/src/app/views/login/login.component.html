@@ -49,7 +49,9 @@
         </mat-card-actions>
         <mat-card-footer class="flex justify-center">
           Don't have an account ?
-          <a class="underline text-blue-800 cursor-pointer ms-1" (click)="onSignUp()">Sign up</a>
+          <button class="underline text-blue-800 cursor-pointer ms-1" (click)="onSignUp()">
+            Sign up
+          </button>
         </mat-card-footer>
       </form>
     } @else {
@@ -137,7 +139,9 @@
         </mat-card-actions>
         <mat-card-footer class="flex justify-center">
           Already have an account ?
-          <a class="underline text-blue-800 cursor-pointer ms-1" (click)="onLogin()">Log in</a>
+          <button class="underline text-blue-800 cursor-pointer ms-1" (click)="onLogin()">
+            Log in
+          </button>
         </mat-card-footer>
       </form>
     }

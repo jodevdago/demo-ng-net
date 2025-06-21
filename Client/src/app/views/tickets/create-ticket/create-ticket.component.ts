@@ -1,11 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  DestroyRef,
-  inject,
-  Inject,
-  OnInit,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -14,7 +7,13 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { map, Observable, of, startWith } from 'rxjs';
 import { MatDividerModule } from '@angular/material/divider';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -25,6 +24,13 @@ import { TicketStatus } from '@enums/ticket-status.enum';
 import { User } from '../../../types/user.type';
 import { TicketDto } from '../../../types/ticketDto.type';
 
+interface TicketForm {
+  title: FormControl<string | undefined>;
+  desc: FormControl<string | undefined>;
+  priority: FormControl<number | undefined>;
+  status: FormControl<TicketStatus | undefined>;
+  assigned: FormControl<User | null | undefined>;
+}
 @Component({
   selector: 'app-create-ticket',
   standalone: true,
@@ -45,28 +51,28 @@ import { TicketDto } from '../../../types/ticketDto.type';
   styleUrl: './create-ticket.component.scss',
 })
 export class CreateTicketComponent implements OnInit {
-  options: any[] = [];
-  users$: Observable<any[]> = of([]);
-  form: FormGroup;
+  options: Partial<User>[] = [];
+  users$: Observable<Partial<User>[]> = of([]);
+  form: FormGroup<TicketForm>;
 
   ticketStore = inject(TicketsStore);
   userStore = inject(UserStore);
 
   readonly TICKETSTATUS = TicketStatus;
 
-  constructor(
-    private fb: FormBuilder,
-    private usersService: UserService,
-    private dialogRef: MatDialogRef<CreateTicketComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
-    private destroyRef: DestroyRef,
-  ) {
-    this.form = this.fb.group({
-      desc: [data?.desc || '', Validators.required],
-      priority: [data?.priority || 0, Validators.required],
-      title: [data?.title || '', Validators.required],
-      assigned: [data?.assigned || {}, Validators.required],
-      status: [data?.status || TicketStatus.PENDING, Validators.required],
+  fb = inject(FormBuilder);
+  usersService = inject(UserService);
+  dialogRef = inject(MatDialogRef<CreateTicketComponent>);
+  destroyRef = inject(DestroyRef);
+  public data = inject(MAT_DIALOG_DATA);
+
+  constructor() {
+    this.form = this.fb.group<TicketForm>({
+      desc: this.fb.control(this.data?.desc || '', Validators.required),
+      priority: this.fb.control(this.data?.priority || 0, Validators.required),
+      title: this.fb.control(this.data?.title || '', Validators.required),
+      assigned: this.fb.control(this.data?.assigned || {}, Validators.required),
+      status: this.fb.control(this.data?.status || TicketStatus.PENDING, Validators.required),
     });
 
     this.usersService
@@ -78,7 +84,7 @@ export class CreateTicketComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.users$ = this.form.get('assigned')!.valueChanges.pipe(
+    this.users$ = this.form.controls.assigned.valueChanges.pipe(
       takeUntilDestroyed(this.destroyRef),
       startWith(''),
       map((value) => {
@@ -91,11 +97,11 @@ export class CreateTicketComponent implements OnInit {
     if (userConnected().role == 'Admin') {
       this.form.enable();
     } else {
-      this.form.get('desc')?.disable();
-      this.form.get('priority')?.disable();
-      this.form.get('title')?.disable();
-      this.form.get('assigned')?.disable();
-      this.form.get('status')?.enable();
+      this.form.controls.desc.disable();
+      this.form.controls.priority.disable();
+      this.form.controls.title.disable();
+      this.form.controls.assigned.disable();
+      this.form.controls.status.enable();
     }
   }
 
@@ -105,11 +111,11 @@ export class CreateTicketComponent implements OnInit {
 
   createOrUpdate(): void {
     const formdata: TicketDto = {
-      title: this.form.get('title')?.value,
-      desc: this.form.get('desc')?.value,
-      priority: this.form.get('priority')?.value,
-      status: this.form.get('status')?.value,
-      assignedId: this.form.get('assigned')?.value.id,
+      title: this.form.value.title || '',
+      desc: this.form.value.desc || '',
+      priority: this.form.value.priority || 1,
+      status: this.form.value.status || TicketStatus.PENDING,
+      assignedId: this.form.value.assigned?.id || '',
     };
     if (this.data) {
       this.ticketStore.updateTicket(this.data.id, formdata);
@@ -117,7 +123,7 @@ export class CreateTicketComponent implements OnInit {
         desc: '',
         priority: 0,
         title: '',
-        assigned: {},
+        assigned: null,
       });
       this.dialogRef.close();
     } else {
@@ -126,14 +132,16 @@ export class CreateTicketComponent implements OnInit {
         desc: '',
         priority: 0,
         title: '',
-        assigned: {},
+        assigned: null,
       });
       this.dialogRef.close();
     }
   }
 
-  private _filter(name: string): User[] {
+  private _filter(name: string): Partial<User>[] {
     const filterValue = name.toLowerCase();
-    return this.options.filter((option) => option.fullname.toLowerCase().includes(filterValue));
+    return this.options.filter(
+      (option) => option.fullname && option.fullname.toLowerCase().includes(filterValue),
+    );
   }
 }

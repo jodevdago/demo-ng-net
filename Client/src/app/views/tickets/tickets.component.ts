@@ -106,11 +106,11 @@ export class TicketsComponent implements OnInit {
 
   assignedTo = new FormControl<string[]>([]);
 
-  constructor(
-    public createDialog: MatDialog,
-    private userService: UserService,
-    private destroyRef: DestroyRef,
-  ) {
+  createDialog = inject(MatDialog);
+  userService = inject(UserService);
+  destroyRef = inject(DestroyRef);
+
+  constructor() {
     this.usersList$ = this.userService.getUsers();
 
     effect(() => {
@@ -142,7 +142,7 @@ export class TicketsComponent implements OnInit {
   }
 
   onClickCreate(data?: Ticket): void {
-    const dialogRef = this.createDialog.open(CreateTicketComponent, {
+    this.createDialog.open(CreateTicketComponent, {
       width: '500px',
       height: '600px',
       data: data,
