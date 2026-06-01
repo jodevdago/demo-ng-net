@@ -1,10 +1,11 @@
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { inject, DestroyRef } from '@angular/core';
+import { inject } from '@angular/core';
+import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { Ticket } from '../types/ticket.type';
 import { TicketsService } from '../services/tickets.service';
 import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
 import { TicketDto } from '../types/ticketDto.type';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { exhaustMap, pipe, switchMap, tap } from 'rxjs';
 
 export const TicketsStore = signalStore(
   { providedIn: 'root' },
@@ -17,64 +18,73 @@ export const TicketsStore = signalStore(
       store,
       ticketsService = inject(TicketsService),
       snackBar = inject(MatSnackBar),
-      destroyRef = inject(DestroyRef),
-    ) => ({
-      loadTicketsByUserIds(userIds: string[]) {
-        const request$ = userIds.length
-          ? ticketsService.getTicketByUsers(userIds)
-          : ticketsService.getTickets();
+    ) => {
+      const fetchTickets = (ids: string[]) =>
+        ids.length ? ticketsService.getTicketByUsers(ids) : ticketsService.getTickets();
 
-        request$.pipe(takeUntilDestroyed(destroyRef)).subscribe((tickets) => {
-          patchState(store, { tickets, lastUserIds: userIds });
-        });
-      },
+      return {
+        loadTicketsByUserIds: rxMethod<string[]>(
+          pipe(
+            switchMap((userIds) =>
+              fetchTickets(userIds).pipe(
+                tap((tickets) => patchState(store, { tickets, lastUserIds: userIds })),
+              ),
+            ),
+          ),
+        ),
 
-      reload() {
-        const ids = store.lastUserIds();
-        const request$ = ids.length
-          ? ticketsService.getTicketByUsers(ids)
-          : ticketsService.getTickets();
+        reload: rxMethod<void>(
+          pipe(
+            switchMap(() =>
+              fetchTickets(store.lastUserIds()).pipe(
+                tap((tickets) => patchState(store, { tickets })),
+              ),
+            ),
+          ),
+        ),
 
-        request$.pipe(takeUntilDestroyed(destroyRef)).subscribe((tickets) => {
-          patchState(store, { tickets });
-        });
-      },
+        createTicket: rxMethod<TicketDto>(
+          pipe(
+            exhaustMap((ticketData) =>
+              ticketsService.createTicket(ticketData).pipe(
+                switchMap(() => fetchTickets(store.lastUserIds())),
+                tap((tickets) => {
+                  patchState(store, { tickets });
+                  snackBar.open('Ticket created successfully', 'Close', { duration: 3000 });
+                }),
+              ),
+            ),
+          ),
+        ),
 
-      createTicket(ticketData: TicketDto) {
-        ticketsService
-          .createTicket(ticketData)
-          .pipe(takeUntilDestroyed(destroyRef))
-          .subscribe(() => {
-            this.reload();
-            snackBar.open('Ticket created successfully', 'Close', {
-              duration: 3000,
-            });
-          });
-      },
+        updateTicket: rxMethod<{ id: string; data: TicketDto }>(
+          pipe(
+            exhaustMap(({ id, data }) =>
+              ticketsService.updateTicket(id, data).pipe(
+                switchMap(() => fetchTickets(store.lastUserIds())),
+                tap((tickets) => {
+                  patchState(store, { tickets });
+                  snackBar.open('Ticket updated successfully', 'Close', { duration: 3000 });
+                }),
+              ),
+            ),
+          ),
+        ),
 
-      updateTicket(ticketId: string, updateData: TicketDto) {
-        ticketsService
-          .updateTicket(ticketId, updateData)
-          .pipe(takeUntilDestroyed(destroyRef))
-          .subscribe(() => {
-            this.reload();
-            snackBar.open('Ticket updated successfully', 'Close', {
-              duration: 3000,
-            });
-          });
-      },
-
-      deleteTicket(ticketId: string) {
-        ticketsService
-          .deleteTicket(ticketId)
-          .pipe(takeUntilDestroyed(destroyRef))
-          .subscribe(() => {
-            this.reload();
-            snackBar.open('Ticket deleted successfully', 'Close', {
-              duration: 3000,
-            });
-          });
-      },
-    }),
+        deleteTicket: rxMethod<string>(
+          pipe(
+            exhaustMap((ticketId) =>
+              ticketsService.deleteTicket(ticketId).pipe(
+                switchMap(() => fetchTickets(store.lastUserIds())),
+                tap((tickets) => {
+                  patchState(store, { tickets });
+                  snackBar.open('Ticket deleted successfully', 'Close', { duration: 3000 });
+                }),
+              ),
+            ),
+          ),
+        ),
+      };
+    },
   ),
 );

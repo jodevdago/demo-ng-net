@@ -118,7 +118,7 @@ export class CreateTicketComponent implements OnInit {
       assignedId: this.form.value.assigned?.id || '',
     };
     if (this.data) {
-      this.ticketStore.updateTicket(this.data.id, formdata);
+      this.ticketStore.updateTicket({ id: this.data.id, data: formdata });
       this.form.patchValue({
         desc: '',
         priority: 0,

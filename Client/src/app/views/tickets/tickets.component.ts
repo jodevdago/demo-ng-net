@@ -39,6 +39,8 @@ import { UserStore } from '@store/user.store';
 import { TicketStatus } from '@enums/ticket-status.enum';
 import { Ticket } from '../../types/ticket.type';
 import { TicketDto } from '../../types/ticketDto.type';
+import { User } from '@app-types/user.type';
+import { Observable, of } from 'rxjs';
 
 @Component({
   selector: 'app-tickets',
@@ -102,7 +104,7 @@ export class TicketsComponent implements OnInit {
 
   displayTable = true;
   user = this.userStore.userConnected;
-  usersList$;
+  usersList$: Observable<Partial<User>[]> = of([]);
 
   assignedTo = new FormControl<string[]>([]);
 
@@ -178,7 +180,7 @@ export class TicketsComponent implements OnInit {
           status: ticket.status,
           assignedId: ticket.assigned.id || '',
         };
-        this.ticketStore.updateTicket(ticketId, ticketDto);
+        this.ticketStore.updateTicket({ id: ticketId, data: ticketDto });
       }
     }
   }
